@@ -1,23 +1,23 @@
 services:
   db:
-    image: postgres:17
-    container_name: user_db
+    image: postgres:17-alpine
+    container_name: users_db
     restart: always
     ports:
       - 9432:5432
     environment:
-      POSTGRES_DB: userdb
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     volumes:
-      - pgdata:/var/libg/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     networks:
       - user-network
+
   user-service:
     container_name: user_service
     build: .
     ports: 
-     - 9000:9000
+      - 9000:9000
     depends_on:
       - db
     volumes:
@@ -25,8 +25,11 @@ services:
       - /app/node_modules
     networks:
       - user-network
+    env_file:
+      - .env
 
 volumes:
   pgdata:
+
 networks:
   user-network:

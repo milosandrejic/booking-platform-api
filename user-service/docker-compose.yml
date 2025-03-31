@@ -6,8 +6,7 @@ services:
     ports:
       - 9432:5432
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_PASSWORD: postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
@@ -26,7 +25,7 @@ services:
     networks:
       - user-network
     env_file:
-      - .env
+      - ./.env
 
 volumes:
   pgdata:

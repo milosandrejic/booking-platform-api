@@ -4,8 +4,7 @@
   "main": "/build/server.js",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "dev": "nodemon",
-    "clean": "rm -rf node_modules"
+    "dev": "nodemon"
   },
   "keywords": [],
   "author": "",
@@ -13,10 +12,7 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "pg": "^8.4.0",
-    "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.21"
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "@types/express": "^5.0.1",

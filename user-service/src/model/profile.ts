@@ -2,11 +2,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  BaseEntity
+  BaseEntity,
+  OneToOne,
+  JoinColumn
 } from "typeorm";
 
+import {Auth} from "./auth"
+
 @Entity()
-export default class Profile extends BaseEntity {
+export class Profile extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
 
@@ -16,9 +20,7 @@ export default class Profile extends BaseEntity {
   @Column("citext")
   last_name: string
 
-  @Column("citext")
-  email: string
-
-  @Column("text")
-  password: string
+  @OneToOne(() => Auth, (auth) => auth.profile)
+  @JoinColumn()
+  auth: Auth
 }

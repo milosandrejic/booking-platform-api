@@ -8,9 +8,10 @@ app.use(express.json())
 
 const port = process.env.PORT;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello!")
 dataSource.initialize();
+
+app.get("/", async (req: Request, res: Response) => {
+  res.send("Helloo!!!")
 });
 
 app.listen(port, () => {

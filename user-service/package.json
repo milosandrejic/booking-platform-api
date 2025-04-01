@@ -5,9 +5,10 @@
   "scripts": {
     "build": "tsc && tsc-alias",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate src/migrations/Migration --timestamp -d src/db/config.ts",
-    "migration:up": "ts-node ./node_modules/typeorm/cli.js migration:run -d src/db/config.ts",
-    "migration:down": "ts-node ./node_modules/typeorm/cli.js migration:revert -d src/db/config.ts",
+    "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate ./src/migrations/$npm_config_filename -t -d ./src/db/config.ts",
+    "migration:up": "ts-node ./node_modules/typeorm/cli.js migration:run -d ./src/db/config.ts",
+    "migration:down": "ts-node ./node_modules/typeorm/cli.js migration:revert -d ./src/db/config.ts",
+    "migration:create": "ts-node ./node_modules/typeorm/cli.js migration:create ./src/migrations/$npm_config_filename",
     "dev": "nodemon"
   },
   "keywords": [],

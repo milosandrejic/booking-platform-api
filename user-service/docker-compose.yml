@@ -1,7 +1,7 @@
 services:
-  db:
+  booking_users_db:
     image: postgres:17-alpine
-    container_name: users_db
+    container_name: booking_users_db
     restart: always
     ports:
       - 9432:5432
@@ -12,13 +12,13 @@ services:
     networks:
       - user-network
 
-  user-service:
-    container_name: user_service
+  booking_user-service:
+    container_name: booking_users_service
     build: .
     ports: 
       - 9000:9000
     depends_on:
-      - db
+      - booking_users_db
     volumes:
       - .:/app
       - /app/node_modules

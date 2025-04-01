@@ -14,9 +14,11 @@ services:
 
   booking_user-service:
     container_name: booking_users_service
-    build: .
+    build: 
+      context: ./user-service
+      dockerfile: ./Dockerfile
     ports: 
-      - 9000:9000
+      - 9001:9001
     depends_on:
       - booking_users_db
     volumes:
@@ -25,7 +27,7 @@ services:
     networks:
       - user-network
     env_file:
-      - ./.env.dev
+      - ./user-service/.env-dev
 
 volumes:
   pgdata:

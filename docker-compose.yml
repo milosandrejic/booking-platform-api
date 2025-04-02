@@ -15,8 +15,8 @@ services:
   booking_user-service:
     container_name: booking_users_service
     build: 
-      context: ./
-      dockerfile: user-service/Dockerfile
+      context: ./user-service
+      dockerfile: ./Dockerfile
     ports: 
       - 9001:9001
     depends_on:

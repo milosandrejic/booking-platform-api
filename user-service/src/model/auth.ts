@@ -8,10 +8,17 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Profile } from "./profile";
+
+import { Profile } from "src/model";
+
+export enum Role {
+  USER = "USER",
+  CLIENT = "CLIENT",
+  ADMIN = "ADMIN"
+}
 
 @Unique(["email"])
-@Entity()
+@Entity("auth")
 export class Auth extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
@@ -19,14 +26,27 @@ export class Auth extends BaseEntity {
   @Column("citext")
   email: string
 
-  @Column("text")
+  @Column({
+    type: "boolean",
+    default: false,
+  })
+  email_verified: boolean
+
+  @Column({
+    type: "text",
+    nullable: true,
+  })
   password: string
+
+  @Column({
+    type: "enum",
+    enum: Role,
+    default: Role.USER
+  })
+  role: Role
 
   @CreateDateColumn()
   created_at: Date
-
-  @UpdateDateColumn()
-  updated_at: Date
 
   @OneToOne(() => Profile, (profile) => profile.auth)
   profile: Profile;

@@ -28,6 +28,7 @@ services:
       - user-network
     env_file:
       - ./user-service/.env
+      
   api_gateway:
     container_name: nginx_api_gateway
     build: 

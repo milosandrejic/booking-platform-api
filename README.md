@@ -1,1 +1,1 @@
-# booking-platform
+# booking-platform-api

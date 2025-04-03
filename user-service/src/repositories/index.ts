@@ -4,5 +4,5 @@ import {
   Profile
 } from "src/model";
 
-export const AuthRepository = dataSource.getRepository(Auth);
+export const authRepository = dataSource.getRepository(Auth);
 export const profileRepository = dataSource.getRepository(Profile)

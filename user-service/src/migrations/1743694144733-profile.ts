@@ -12,10 +12,11 @@ export class Profile1743692313625 implements MigrationInterface {
             name: "profile",
             columns: [
                 {
-                    name: "id",
-                    type: "uuid",
-                    isGenerated: true,
-                    isPrimary: true
+                  name: "id",
+                  type: "uuid",
+                  isPrimary: true,
+                  generationStrategy: "uuid",
+                  default: "uuid_generate_v4()"
                 },
                 {
                     name: "first_name",
@@ -26,7 +27,7 @@ export class Profile1743692313625 implements MigrationInterface {
                     type: "citext"
                 },
                 {
-                    name: "full_name",
+                    name: "display_name",
                     type: "citext"
                 },
                 {

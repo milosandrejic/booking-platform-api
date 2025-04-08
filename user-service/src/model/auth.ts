@@ -6,7 +6,6 @@ import {
   OneToOne,
   Unique,
   CreateDateColumn,
-  UpdateDateColumn,
 } from "typeorm";
 
 import { Profile } from "src/model";
@@ -48,6 +47,6 @@ export class Auth extends BaseEntity {
   @CreateDateColumn()
   created_at: Date
 
-  @OneToOne(() => Profile, (profile) => profile.auth)
+  @OneToOne(() => Profile)
   profile: Profile;
 }

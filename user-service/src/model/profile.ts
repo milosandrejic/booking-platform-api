@@ -47,7 +47,7 @@ export class Profile extends BaseEntity {
     type: "timestamp without time zone",
     nullable: true
   })
-  date_of_brith: Date
+  date_of_birth: Date
 
   @Column({
     type: "citext",
@@ -61,12 +61,7 @@ export class Profile extends BaseEntity {
   })
   gender: Gender
 
-  @OneToOne(
-    () => Auth, (auth) => auth.profile,
-    {
-      cascade: ["remove"]
-    },
-  )
-  @JoinColumn()
+  @OneToOne(() => Auth, {cascade: ["remove", "insert"], eager: true})
+  @JoinColumn({name: "auth_id"})
   auth: Auth
 }

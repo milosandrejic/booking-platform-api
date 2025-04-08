@@ -1,9 +1,9 @@
 import express, { Router } from "express";
 
-import AuthController from "controllers/AuthController";
+import ProfileController from "src/controllers/Profile";
 
 const router: Router = express.Router();
 
-router.get("/auth/:id", AuthController.get);
+router.post("/profile", ProfileController.create);
 
 export default router;

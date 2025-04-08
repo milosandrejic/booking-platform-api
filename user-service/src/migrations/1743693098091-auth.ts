@@ -9,12 +9,18 @@ export class Auth1743693098091 implements MigrationInterface {
                 {
                     name: "id",
                     type: "uuid",
-                    isGenerated: true,
-                    isPrimary: true
+                    isPrimary: true,
+                    generationStrategy: "uuid",
+                    default: "uuid_generate_v4()"
                 },
                 {
                     name: "email",
                     type: "citext"
+                },
+                {
+                    name: "password",
+                    type: "text",
+                    isNullable: true
                 },
                 {
                     name: "email_verified",

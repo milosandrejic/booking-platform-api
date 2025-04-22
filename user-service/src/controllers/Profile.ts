@@ -1,4 +1,5 @@
 import {Request, Response} from "express"
+import Joi from "joi";
 
 import {
   Profile,
@@ -7,7 +8,23 @@ import {
   Role
 } from "src/model"
 
-import { authRepository, profileRepository } from "src/repositories";
+import { profileRepository } from "src/repositories";
+
+const createUserSchema = Joi.object({
+  email: Joi
+    .string()
+    .email()
+    .trim()
+    .required(),
+  first_name: Joi
+    .string()
+    .trim()
+    .required(),
+  last_name: Joi
+    .string()
+    .trim()
+    .required()
+})
 
 class ProfileController {
   create = async (req: Request, res: Response) => {
@@ -22,6 +39,14 @@ class ProfileController {
       gender
     } = req.body;
 
+    const {error} = createUserSchema.validate({email, first_name, last_name});
+
+    if (error) {
+      res.status(400).send(error);
+
+      return;
+    }
+
     const auth = new Auth();
 
     auth.email = email;
@@ -29,14 +54,19 @@ class ProfileController {
 
     const profile = new Profile();
 
-    profile.first_name = first_name;
+    profile.first_name = first_name.trim;
     profile.last_name = last_name;
-    profile.display_name = display_name;
     profile.phone_number = phone_number;
     profile.date_of_birth = date_of_birth;
     profile.nationality = nationality;
     profile.gender = gender;
     profile.auth = auth;
+
+    if (display_name) {
+      profile.display_name = display_name;
+    } else {
+      profile.display_name = `${profile.first_name} ${profile.last_name}`;
+    }
 
     try {
       await profileRepository.save(profile)

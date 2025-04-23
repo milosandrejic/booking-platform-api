@@ -9,7 +9,8 @@ dataSource.initialize();
 const app: Express = express();
 
 app.use(express.json())
-app.use(router);
+
+app.use("/api/v1", router);
 
 const port = process.env.PORT;
 

@@ -1,6 +1,4 @@
 import {Request, Response} from "express"
-import Joi from "joi";
-import dayjs from "dayjs";
 
 import {
   User,
@@ -9,34 +7,6 @@ import {
 } from "src/model"
 
 import { userRepository } from "src/repositories";
-
-const userSchema = Joi.object({
-  email: Joi
-    .string()
-    .email()
-    .trim()
-    .required(),
-  first_name: Joi
-    .string()
-    .trim()
-    .required(),
-  last_name: Joi
-    .string()
-    .trim()
-    .required(),
-  phone_number: Joi
-    .string()
-    .trim()
-    .required(),
-  date_of_birth: Joi
-    .date()
-    .min(dayjs().subtract(18, "years").toDate())
-    .required(),
-  nationality: Joi
-    .string()
-    .trim()
-    .required()
-});
 
 class UserController {
   create = async (req: Request, res: Response) => {
@@ -50,14 +20,6 @@ class UserController {
       nationality,
       gender
     } = req.body;
-
-    const {error} = userSchema.validate(req.body);
-
-    if (error) {
-      res.status(400).send(error);
-
-      return;
-    }
 
     const auth = new Auth();
 
@@ -106,13 +68,21 @@ class UserController {
       id: user.id
     } as User
 
-    const {error} = userSchema.validate(user);
-
-    if (error) {
-      res.status(400).send(error);
-    }
-
     user = await userRepository.save(user);
+
+    res.send(user);
+  }
+
+  get = async (req: Request, res: Response) => {
+    const user = await userRepository.findOneBy({id: req.params.id});
+
+    if (!user) {
+      res.status(400).send({
+        error: "User not found"
+      })
+
+      return;
+    }
 
     res.send(user);
   }

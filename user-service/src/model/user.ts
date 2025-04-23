@@ -14,8 +14,8 @@ export enum Gender {
   FEMALE = "female"
 }
 
-@Entity("profile")
-export class Profile extends BaseEntity {
+@Entity("user")
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string
 

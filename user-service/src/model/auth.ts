@@ -8,7 +8,7 @@ import {
   CreateDateColumn,
 } from "typeorm";
 
-import { Profile } from "src/model";
+import { User } from "src/model";
 
 export enum Role {
   USER = "USER",
@@ -47,6 +47,6 @@ export class Auth extends BaseEntity {
   @CreateDateColumn()
   created_at: Date
 
-  @OneToOne(() => Profile)
-  profile: Profile;
+  @OneToOne(() => User)
+  user: User;
 }

@@ -3,15 +3,14 @@ import Joi from "joi";
 import dayjs from "dayjs";
 
 import {
-  Profile,
-  Gender,
+  User,
   Auth,
   Role
 } from "src/model"
 
-import { profileRepository } from "src/repositories";
+import { userRepository } from "src/repositories";
 
-const profileSchema = Joi.object({
+const userSchema = Joi.object({
   email: Joi
     .string()
     .email()
@@ -39,7 +38,7 @@ const profileSchema = Joi.object({
     .required()
 });
 
-class ProfileController {
+class UserController {
   create = async (req: Request, res: Response) => {
     const {
       email,
@@ -52,7 +51,7 @@ class ProfileController {
       gender
     } = req.body;
 
-    const {error} = profileSchema.validate({email, first_name, last_name});
+    const {error} = userSchema.validate(req.body);
 
     if (error) {
       res.status(400).send(error);
@@ -65,58 +64,58 @@ class ProfileController {
     auth.email = email;
     auth.role = Role.USER;
 
-    let profile = new Profile();
+    let user = new User();
 
-    profile.first_name = first_name;
-    profile.last_name = last_name;
-    profile.phone_number = phone_number;
-    profile.date_of_birth = date_of_birth;
-    profile.nationality = nationality;
-    profile.gender = gender;
-    profile.auth = auth;
+    user.first_name = first_name;
+    user.last_name = last_name;
+    user.phone_number = phone_number;
+    user.date_of_birth = date_of_birth;
+    user.nationality = nationality;
+    user.gender = gender;
+    user.auth = auth;
 
     if (display_name) {
-      profile.display_name = display_name;
+      user.display_name = display_name;
     } else {
-      profile.display_name = `${profile.first_name} ${profile.last_name}`;
+      user.display_name = `${user.first_name} ${user.last_name}`;
     }
 
     try {
-      profile = await profileRepository.save(profile)
+      user = await userRepository.save(user)
   
-      res.send(profile);
+      res.send(user);
     } catch {
       res.sendStatus(400)
     }
   }
 
   update = async (req: Request, res: Response) => {
-    let profile = await profileRepository.findOneBy({id: req.params.id})
+    let user = await userRepository.findOneBy({id: req.params.id})
 
-    if (!profile) {
+    if (!user) {
       res.status(400).send({
-        error: "Profile not found",
+        error: "User not found",
       });
 
       return;
     }
 
-    profile = {
-      ...profile,
+    user = {
+      ...user,
       ...req.body,
-      id: profile.id
-    } as Profile
+      id: user.id
+    } as User
 
-    const {error} = profileSchema.validate(profile);
+    const {error} = userSchema.validate(user);
 
     if (error) {
       res.status(400).send(error);
     }
 
-    profile = await profileRepository.save(profile);
+    user = await userRepository.save(user);
 
-    res.send(profile);
+    res.send(user);
   }
 }
 
-export default new ProfileController();
+export default new UserController();

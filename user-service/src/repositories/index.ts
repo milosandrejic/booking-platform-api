@@ -1,8 +1,8 @@
 import { dataSource } from "src/db/config";
 import {
   Auth,
-  Profile
+  User
 } from "src/model";
 
 export const authRepository = dataSource.getRepository(Auth);
-export const profileRepository = dataSource.getRepository(Profile)
+export const userRepository = dataSource.getRepository(User)

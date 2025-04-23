@@ -1,23 +1,22 @@
 import {
     MigrationInterface,
     QueryRunner,
-    Table,
     TableColumn,
     TableForeignKey
 } from "typeorm";
 
-export class Profile1743694303646 implements MigrationInterface {
+export class UserAuthRelation1743694303646 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.addColumn("profile", new TableColumn({
+        await queryRunner.addColumn("user", new TableColumn({
             name: "auth_id",
             type: "uuid"
         }))
 
         await queryRunner.createForeignKey(
-            "profile",
+            "user",
             new TableForeignKey({
-                name: "fk_profile_auth",
+                name: "fk_user_auth",
                 columnNames: ["auth_id"],
                 referencedColumnNames: ["id"],
                 referencedTableName: "auth",
@@ -27,7 +26,7 @@ export class Profile1743694303646 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropColumn("profile", "auth_id");
+        await queryRunner.dropColumn("user", "auth_id");
     }
 
 }

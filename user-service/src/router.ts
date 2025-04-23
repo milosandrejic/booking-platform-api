@@ -1,10 +1,10 @@
 import express, { Router } from "express";
 
-import ProfileController from "src/controllers/Profile";
+import UserController from "src/controllers/User";
 
 const router: Router = express.Router();
 
-router.post("/profile", ProfileController.create);
-router.patch("/profile/:id", ProfileController.update);
+router.post("/", UserController.create);
+router.patch("/:id", UserController.update);
 
 export default router;

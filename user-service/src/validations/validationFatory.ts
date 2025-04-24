@@ -5,17 +5,8 @@ import {
 import _ from "lodash";
 import { Gender } from "src/model";
 
-// email,
-// first_name,
-// last_name,
-// display_name,
-// phone_number,
-// date_of_birth,
-// nationality,
-// gender
-
 export class ValidationFactory {
-  private static readonly schemas: Record<string, ValidationChain[]> = {
+  private static readonly schemas: Record<string,  ValidationChain[]> = {
     "/user": checkSchema({
       email: {
         isEmail: true,

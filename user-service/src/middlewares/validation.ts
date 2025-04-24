@@ -4,18 +4,27 @@ import {
   NextFunction
 } from "express"
 
-import {validationResult} from "express-validator"
-
+import {validationResult, ResultFactory} from "express-validator"
 import _ from "lodash";
 
+import { ValidationFactory } from "src/validations/validationFatory";
+
+const validationResultHandler: ResultFactory<string> = validationResult.withDefaults({formatter: (error) => error.msg});
+
 export const withValidation = async (req: Request, res: Response, next: NextFunction) => {
-  const result = validationResult(req);
+  const validators = ValidationFactory.getValidationSchema(req.route.path);
+
+  await Promise.all(validators.map((v) => v.run(req)))
+
+  const result = validationResultHandler(req);
 
   if (!result.isEmpty()) {
     res.status(400).send({
       message: "Validation failed",
-      errors: result.array()
+      errors: result.mapped()
     })
+
+    return;
   }
 
   next();

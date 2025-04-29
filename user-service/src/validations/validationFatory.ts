@@ -9,6 +9,6 @@ export class ValidationFactory {
   }
 
   static getValidationSchema(route: string): ValidationChain[] {
-    return this.schemas[route];
+    return this.schemas?.[route];
   }
 }

@@ -7,7 +7,7 @@ import { withValidation } from "src/middlewares/validation";
 const router: Router = express.Router();
 
 router.post("/user", withValidation, UserController.create);
-router.patch("/user/:id", UserController.update);
+router.patch("/user/:id", withValidation, UserController.update);
 router.get("/user/:id", UserController.get);
 
 export default router;

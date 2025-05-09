@@ -37,7 +37,7 @@ class AuthController {
         email: auth.email,
         role: auth.role
       },
-      process.env.JWT_SECRET as string
+      process.env.JWT_SECRET as string,
     )
 
     auth.access_token = access_token;

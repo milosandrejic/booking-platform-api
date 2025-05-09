@@ -44,6 +44,12 @@ export class Auth extends BaseEntity {
   })
   role: Role
 
+  @Column({
+    type: "text",
+    nullable: true,
+  })
+  access_token: string
+
   @CreateDateColumn()
   created_at: Date
 

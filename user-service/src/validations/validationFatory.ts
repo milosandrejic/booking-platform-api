@@ -1,11 +1,15 @@
 import {ValidationChain} from "express-validator";
 import _ from "lodash";
 
-import { createProfileSchema } from "src/validations/schema";
+import {
+  createProfileSchema,
+  updateProfileSchema
+} from "src/validations/schema";
 
 export class ValidationFactory {
   private static readonly schemas: Record<string,  ValidationChain[]> = {
-    "/user": createProfileSchema
+    "/user": createProfileSchema,
+    "/user/:id": updateProfileSchema
   }
 
   static getValidationSchema(route: string): ValidationChain[] {

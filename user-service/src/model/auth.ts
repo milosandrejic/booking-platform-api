@@ -5,7 +5,7 @@ import {
   BaseEntity,
   OneToOne,
   Unique,
-  CreateDateColumn,
+  CreateDateColumn
 } from "typeorm";
 
 import { User } from "src/model";
@@ -20,38 +20,38 @@ export enum Role {
 @Entity("auth")
 export class Auth extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
-  id: string
+  id: string;
 
   @Column("citext")
-  email: string
+  email: string;
 
   @Column({
     type: "boolean",
-    default: false,
+    default: false
   })
-  email_verified: boolean
+  email_verified: boolean;
 
   @Column({
     type: "text",
-    nullable: true,
+    nullable: true
   })
-  password: string
+  password: string;
 
   @Column({
     type: "enum",
     enum: Role,
     default: Role.USER
   })
-  role: Role
+  role: Role;
 
   @Column({
     type: "text",
-    nullable: true,
+    nullable: true
   })
-  access_token: string
+  access_token: string;
 
   @CreateDateColumn()
-  created_at: Date
+  created_at: Date;
 
   @OneToOne(() => User)
   user: User;

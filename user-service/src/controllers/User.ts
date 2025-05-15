@@ -1,10 +1,10 @@
-import {Request, Response} from "express"
+import { Request, Response } from "express";
 
 import {
   User,
   Auth,
   Role
-} from "src/model"
+} from "src/model";
 
 import { userRepository } from "src/repositories";
 
@@ -43,20 +43,20 @@ class UserController {
     }
 
     try {
-      user = await userRepository.save(user)
-  
+      user = await userRepository.save(user);
+
       res.send(user);
     } catch {
-      res.sendStatus(400)
+      res.sendStatus(400);
     }
-  }
+  };
 
   update = async (req: Request, res: Response) => {
-    let user = await userRepository.findOneBy({id: req.params.id})
+    let user = await userRepository.findOneBy({ id: req.params.id });
 
     if (!user) {
       res.status(400).send({
-        error: "User not found",
+        error: "User not found"
       });
 
       return;
@@ -66,26 +66,26 @@ class UserController {
       ...user,
       ...req.body,
       id: user.id
-    } as User
+    } as User;
 
     user = await userRepository.save(user);
 
     res.send(user);
-  }
+  };
 
   get = async (req: Request, res: Response) => {
-    const user = await userRepository.findOneBy({id: req.params.id});
+    const user = await userRepository.findOneBy({ id: req.params.id });
 
     if (!user) {
       res.status(400).send({
         error: "User not found"
-      })
+      });
 
       return;
     }
 
     res.send(user);
-  }
+  };
 }
 
 export default new UserController();

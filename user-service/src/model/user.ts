@@ -7,7 +7,7 @@ import {
   JoinColumn
 } from "typeorm";
 
-import { Auth } from "src/model"
+import { Auth } from "src/model";
 
 export enum Gender {
   MALE = "male",
@@ -17,51 +17,52 @@ export enum Gender {
 @Entity("user")
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
-  id: string
+  id: string;
 
   @Column({
     type: "citext",
     nullable: true
   })
-  first_name: string
+  first_name: string;
 
   @Column({
     type: "citext",
     nullable: true
   })
-  last_name: string
+  last_name: string;
 
   @Column({
     type: "citext",
     nullable: true
   })
-  display_name: string
+  display_name: string;
 
   @Column({
     type: "citext",
     nullable: true
   })
-  phone_number: string
+  phone_number: string;
 
   @Column({
     type: "timestamp without time zone",
     nullable: true
   })
-  date_of_birth: Date
+  date_of_birth: Date;
 
   @Column({
     type: "citext",
     nullable: true
   })
-  nationality: string
+  nationality: string;
 
   @Column({
     type: "enum",
     enum: Gender
   })
-  gender: Gender
+  gender: Gender;
 
-  @OneToOne(() => Auth, {cascade: ["remove", "insert"], eager: true})
-  @JoinColumn({name: "auth_id"})
-  auth: Auth
+  @OneToOne(() => Auth, { cascade: ["remove", "insert"],
+    eager: true })
+  @JoinColumn({ name: "auth_id" })
+  auth: Auth;
 }

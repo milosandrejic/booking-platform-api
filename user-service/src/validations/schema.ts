@@ -1,7 +1,7 @@
 import {
   ValidationChain,
   checkSchema
-} from "express-validator"
+} from "express-validator";
 import { Gender } from "src/model";
 
 export const createProfileSchema: ValidationChain[] = checkSchema({
@@ -11,7 +11,7 @@ export const createProfileSchema: ValidationChain[] = checkSchema({
     },
     isEmail: {
       errorMessage: "Email is in wrong format"
-    },
+    }
   },
   first_name: {
     notEmpty: {
@@ -44,12 +44,12 @@ export const createProfileSchema: ValidationChain[] = checkSchema({
     },
     isMobilePhone: {
       errorMessage: "Phone number is in wrong format"
-    },
+    }
   },
   date_of_birth: {
     isDate: {
       errorMessage: "Date is invalid"
-    },
+    }
   },
   nationality: {
     notEmpty: {
@@ -75,7 +75,7 @@ export const updateProfileSchema: ValidationChain[] = checkSchema({
     optional: true,
     isEmail: {
       errorMessage: "Email is in wrong format"
-    },
+    }
   },
   first_name: {
     optional: true,
@@ -102,13 +102,13 @@ export const updateProfileSchema: ValidationChain[] = checkSchema({
     optional: true,
     isMobilePhone: {
       errorMessage: "Phone number is in wrong format"
-    },
+    }
   },
   date_of_birth: {
     optional: true,
     isDate: {
       errorMessage: "Date is invalid"
-    },
+    }
   },
   nationality: {
     optional: true,

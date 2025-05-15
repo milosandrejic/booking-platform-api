@@ -5,4 +5,4 @@ import {
 } from "src/model";
 
 export const authRepository = dataSource.getRepository(Auth);
-export const userRepository = dataSource.getRepository(User)
+export const userRepository = dataSource.getRepository(User);

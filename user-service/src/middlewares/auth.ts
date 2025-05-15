@@ -10,12 +10,12 @@ import { Auth } from "src/model";
 import { authRepository } from "src/repositories";
 
 type DecodedJwtToken = {
-  id: string,
-  email: string,
-  role: string
-}
+  id: string;
+  email: string;
+  role: string;
+};
 
-const resolveAuth = async (access_token: string): Promise<Auth |  null> => {
+const resolveAuth = async (access_token: string): Promise<Auth | null> => {
   if (!access_token) {
     return null;
   }
@@ -25,7 +25,7 @@ const resolveAuth = async (access_token: string): Promise<Auth |  null> => {
   const auth = await authRepository.findOneBy({ id: decodedToken.id });
 
   return auth;
-}
+};
 
 export const withAuth = async (req: Request, res: Response, next: NextFunction) => {
   const access_token = req.headers.authorization ?? "";
@@ -35,7 +35,7 @@ export const withAuth = async (req: Request, res: Response, next: NextFunction) 
   if (!auth) {
     res.status(401).send({
       error: "Unauthorized."
-    })
+    });
 
     return;
   }
@@ -43,4 +43,4 @@ export const withAuth = async (req: Request, res: Response, next: NextFunction) 
   req.auth = auth;
 
   next();
-}
+};

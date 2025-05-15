@@ -27,15 +27,26 @@ export default defineConfig([
   {
     rules: {
       semi: "error",
-      "@stylistic/indent": ["warn", 2],
-      "@stylistic/array-element-newline": [
-        "warn",
-        {
-          multiline: true,
-          minItems: 4
-        }
-      ],
-      "@stylistic/quote-props": ["warn", "as-needed"]
+      curly: "error",
+      "@stylistic/array-element-newline": ["warn", { multiline: true, minItems: 5 }],
+      "@stylistic/arrow-parens": ["warn", "as-needed", { requireForBlockBody: true }],
+      "@stylistic/dot-location": ["warn", "property"],
+      "@stylistic/indent": ["warn", 2, { SwitchCase: 1 }],
+      "@stylistic/max-len": ["error", {
+        code: 160,
+        tabWidth: 2
+      }],
+      "@stylistic/multiline-ternary": ["error", "never"],
+      "@stylistic/space-before-function-paren": "off",
+      "@stylistic/function-call-argument-newline": ["warn", "consistent"],
+      "@stylistic/no-multiple-empty-lines": ["error", { 
+        max: 1, 
+        maxEOF: 1, 
+        maxBOF: 1
+      }],
+      "@stylistic/object-curly-spacing": ["warn", "always"],
+      "@stylistic/padded-blocks": ["warn", "never"],
+      "@stylistic/quote-props": ["warn", "as-needed"],
     }
   }
 ]);

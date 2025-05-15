@@ -5,11 +5,11 @@ export class PasswordUtils {
     const hashedPassword = await bcypt.hash(plainPassword, 10);
 
     return hashedPassword;
-  }
+  };
 
   public static compare = async (plainPassword: string, hashedPassword: string): Promise<boolean> => {
     const match = await bcypt.compare(plainPassword, hashedPassword);
 
     return match;
-  }
+  };
 }

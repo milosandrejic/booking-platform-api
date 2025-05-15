@@ -18,7 +18,7 @@ class AuthController {
     if (!auth) {
 
       res.status(400).send({
-        "error": `User with email ${email} does no exists`
+        error: `User with email ${email} does no exists`
       });
 
       return;
@@ -33,7 +33,7 @@ class AuthController {
     if (!passwordsMatch) {
 
       res.status(400).send({
-        "error": "Wrong email or password"
+        error: "Wrong email or password"
       });
 
       return;
@@ -42,9 +42,9 @@ class AuthController {
 
     const access_token = jwt.sign(
       {
-        "id": auth.id,
-        "email": auth.email,
-        "role": auth.role
+        id: auth.id,
+        email: auth.email,
+        role: auth.role
       },
       process.env.JWT_SECRET as string
     );

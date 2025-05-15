@@ -3,9 +3,10 @@
     "editor.indentSize": "tabSize",
     "editor.tabSize": 2,
     "eslint.workingDirectories": [
-        "./"
+      {
+        "mode": "auto"
+      }
     ],
-    "[typescript]": {
-      "editor.defaultFormatter": "vscode.typescript-language-features"
-    }
+    "eslint.format.enable": true,
+    "eslint.useFlatConfig": true,
 }

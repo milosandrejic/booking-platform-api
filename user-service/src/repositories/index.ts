@@ -1,8 +1,5 @@
-import { dataSource } from "src/db/config";
-import {
-  Auth,
-  User
-} from "src/model";
+import { AuthRepository } from "./AuthRepository";
+import { UserRepository } from "./UserRepository";
 
-export const authRepository = dataSource.getRepository(Auth);
-export const userRepository = dataSource.getRepository(User);
+export const authRepository = new AuthRepository();
+export const userRepository = new UserRepository();

@@ -48,5 +48,29 @@ export default defineConfig([
       "@stylistic/padded-blocks": ["warn", "never"],
       "@stylistic/quote-props": ["warn", "as-needed"],
     }
+  },
+  {
+    files: [
+      "src/**/*.ts",
+      "src/tests/**/*.ts"
+    ],
+    languageOptions: {sourceType: "commonjs"}
+  },
+  {
+    files: ["**/*.{js,mjs,cjs,ts}"],
+    languageOptions: {globals: globals.browser}
+  },
+  // Test files specific configuration
+  {
+    files: ["**/*.test.ts", "**/tests/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/restrict-template-expressions": "off",
+      "@typescript-eslint/unbound-method": "off"
+    }
   }
 ]);

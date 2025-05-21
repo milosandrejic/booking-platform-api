@@ -11,5 +11,12 @@ module.exports = {
   },
   setupFiles: ["<rootDir>/src/tests/setup.ts"],
   coverageDirectory: "coverage",
-  collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts", "!src/tests/**/*.ts"]
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "!src/**/*.d.ts",
+    "!src/tests/**/*.ts",
+    "!src/migrations/**/*.ts",
+    "!src/server.ts",
+    "!src/router.ts"
+  ]
 };

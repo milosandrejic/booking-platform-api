@@ -3,10 +3,8 @@ import { Role, Gender } from "src/model";
 import { userRepository } from "src/repositories";
 import userController from "src/controllers/User";
 import { describe, expect, jest, beforeEach, it } from "@jest/globals";
-import { User } from "src/model/user";
-import { Auth } from "src/model/auth";
+import { User, Auth } from "src/model";
 
-// Mock dependencies
 jest.mock("src/repositories", () => ({
   userRepository: {
     findOneBy: jest.fn(),
@@ -37,7 +35,7 @@ describe("UserController", () => {
         gender: Gender.MALE
       },
       params: {
-        id: "1"
+        id: "123"
       }
     };
 
@@ -51,7 +49,6 @@ describe("UserController", () => {
       sendStatus: jest.fn().mockReturnThis()
     };
 
-    // Reset all mocks before each test
     jest.clearAllMocks();
   });
 
@@ -69,7 +66,7 @@ describe("UserController", () => {
       } as Partial<Auth>;
 
       const mockUser = {
-        id: "1",
+        id: "123",
         first_name: "John",
         last_name: "Doe",
         display_name: "John Doe",
@@ -109,7 +106,7 @@ describe("UserController", () => {
       } as Partial<Auth>;
 
       const mockUser = {
-        id: "1",
+        id: "123",
         first_name: "John",
         last_name: "Doe",
         display_name: "Custom Name",
@@ -157,7 +154,7 @@ describe("UserController", () => {
       } as Partial<Auth>;
 
       const existingUser = {
-        id: "1",
+        id: "123",
         first_name: "John",
         last_name: "Doe",
         display_name: "John Doe",
@@ -222,7 +219,7 @@ describe("UserController", () => {
       } as Partial<Auth>;
 
       const mockUser = {
-        id: "1",
+        id: "123",
         first_name: "John",
         last_name: "Doe",
         display_name: "John Doe",
@@ -240,7 +237,7 @@ describe("UserController", () => {
         mockResponse as unknown as Response
       );
 
-      expect(userRepository.findOneBy).toHaveBeenCalledWith({ id: "1" });
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({ id: "123" });
       expect(responseObject).toEqual(mockUser);
     });
 

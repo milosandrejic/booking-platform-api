@@ -28,7 +28,7 @@ export default defineConfig([
     rules: {
       semi: "error",
       curly: "error",
-      "@stylistic/array-element-newline": ["warn", { multiline: true, minItems: 5 }],
+      "@stylistic/array-element-newline": ["warn", { multiline: true, minItems: 4 }],
       "@stylistic/arrow-parens": ["warn", "as-needed", { requireForBlockBody: true }],
       "@stylistic/dot-location": ["warn", "property"],
       "@stylistic/indent": ["warn", 2, { SwitchCase: 1 }],

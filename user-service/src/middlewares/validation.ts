@@ -8,9 +8,9 @@ import { validationResult, ResultFactory } from "express-validator";
 
 import { ValidationFactory } from "src/validations/validationFatory";
 
-const validationResultHandler: ResultFactory<string> = validationResult.withDefaults({ formatter: error => error.msg });
-
 export const withValidation = async (req: Request, res: Response, next: NextFunction) => {
+  const validationResultHandler: ResultFactory<string> = validationResult.withDefaults({ formatter: error => error.msg });
+
   const validators = ValidationFactory.getValidationSchema(req.route.path);
 
   if (validators) {

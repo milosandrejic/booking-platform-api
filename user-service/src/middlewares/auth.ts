@@ -20,11 +20,14 @@ const resolveAuth = async (access_token: string): Promise<Auth | null> => {
     return null;
   }
 
-  const decodedToken = jwt.verify(access_token, process.env.JWT_SECRET as string) as DecodedJwtToken;
+  try {
+    const decodedToken = jwt.verify(access_token, process.env.JWT_SECRET as string) as DecodedJwtToken;
+    const auth = await authRepository.findOneBy({ id: decodedToken.id });
 
-  const auth = await authRepository.findOneBy({ id: decodedToken.id });
-
-  return auth;
+    return auth;
+  } catch {
+    return null;
+  }
 };
 
 export const withAuth = async (req: Request, res: Response, next: NextFunction) => {
@@ -44,3 +47,5 @@ export const withAuth = async (req: Request, res: Response, next: NextFunction) 
 
   next();
 };
+
+export { resolveAuth };

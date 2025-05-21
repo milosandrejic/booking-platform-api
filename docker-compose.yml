@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_PASSWORD: postgres
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - users_storage:/var/lib/postgresql/data
     networks:
       - user-network
 
@@ -44,7 +44,7 @@ services:
       - booking_user_service
 
 volumes:
-  pgdata:
+  users_storage:
 
 networks:
   user-network:

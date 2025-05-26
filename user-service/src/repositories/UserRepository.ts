@@ -9,37 +9,37 @@ export class UserRepository {
     this.repository = dataSource.getRepository(User);
   }
 
-  async findOneByEmail(email: string): Promise<User | null> {
+  findOneByEmail = async (email: string): Promise<User | null> => {
     return this.repository.findOne({
       where: { auth: { email } },
       relations: ["auth"]
     });
-  }
+  };
 
-  async save(user: User): Promise<User> {
+  save = async (user: User): Promise<User> => {
     return this.repository.save(user);
-  }
+  };
 
-  async findOneBy(where: FindOptionsWhere<User>): Promise<User | null> {
+  findOneBy = async (where: FindOptionsWhere<User>): Promise<User | null> => {
     return this.repository.findOneBy(where);
-  }
+  };
 
-  async findOne(where: FindOptionsWhere<User>): Promise<User | null> {
+  findOne = async (where: FindOptionsWhere<User>): Promise<User | null> => {
     return this.repository.findOne({ where });
-  }
+  };
 
-  async find(where: FindOptionsWhere<User>): Promise<User[]> {
+  find = async (where: FindOptionsWhere<User>): Promise<User[]> => {
     return this.repository.find({ where });
-  }
+  };
 
-  async remove(user: User): Promise<User> {
+  remove = async (user: User): Promise<User> => {
     return this.repository.remove(user);
-  }
+  };
 
-  async findOneWithAuth(id: string): Promise<User | null> {
+  findOneWithAuth = async (id: string): Promise<User | null> => {
     return this.repository.findOne({
       where: { id },
       relations: ["auth"]
     });
-  }
+  };
 }

@@ -9,27 +9,27 @@ export class AuthRepository {
     this.repository = dataSource.getRepository(Auth);
   }
 
-  async findOneByEmail(email: string): Promise<Auth | null> {
+  findOneByEmail = async (email: string): Promise<Auth | null> => {
     return this.repository.findOneBy({ email });
-  }
+  };
 
-  async save(auth: Auth): Promise<Auth> {
+  save = async (auth: Auth): Promise<Auth> => {
     return this.repository.save(auth);
-  }
+  };
 
-  async findOneBy(where: FindOptionsWhere<Auth>): Promise<Auth | null> {
+  findOneBy = async (where: FindOptionsWhere<Auth>): Promise<Auth | null> => {
     return this.repository.findOneBy(where);
-  }
+  };
 
-  async findOne(where: FindOptionsWhere<Auth>): Promise<Auth | null> {
+  findOne = async (where: FindOptionsWhere<Auth>): Promise<Auth | null> => {
     return this.repository.findOne({ where });
-  }
+  };
 
-  async find(where: FindOptionsWhere<Auth>): Promise<Auth[]> {
+  find = async (where: FindOptionsWhere<Auth>): Promise<Auth[]> => {
     return this.repository.find({ where });
-  }
+  };
 
-  async remove(auth: Auth): Promise<Auth> {
+  remove = async (auth: Auth): Promise<Auth> => {
     return this.repository.remove(auth);
-  }
+  };
 }

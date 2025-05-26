@@ -3,7 +3,7 @@ import { Role } from "src/model";
 import { authRepository } from "src/repositories";
 import authController from "src/controllers/Auth";
 import { describe, expect, jest, beforeEach, it } from "@jest/globals";
-import { Auth } from "src/model/auth";
+import { Auth } from "src/model/Auth";
 import * as jwt from "jsonwebtoken";
 import { PasswordUtils } from "src/utils/passwordUtils";
 

@@ -1,0 +1,7 @@
+{
+  "watch": ["src"],
+  "ext": "ts,json",
+  "ignore": ["src/**/*.spec.ts"],
+  "exec": "npx ts-node-dev  --respawn --transpile-only -r tsconfig-paths/register src/server.ts",
+  "delay": 3000
+}

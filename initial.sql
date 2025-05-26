@@ -13,3 +13,9 @@ CREATE DATABASE "booking-users"
     OWNER = booking
     ENCODING = 'UTF8'
     CONNECTION LIMIT = -1;
+
+CREATE DATABASE "booking-property"
+  WITH 
+  OWNER = booking
+  ENCODING = 'UTF8'
+  CONNECTION LIMIT = -1;

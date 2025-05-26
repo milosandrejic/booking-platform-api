@@ -1,7 +1,7 @@
 services:
-  booking_users_db:
+  users_db:
     image: postgres:17-alpine
-    container_name: booking_users_db
+    container_name: users_db
     restart: always
     ports:
       - 9432:5432
@@ -10,25 +10,55 @@ services:
     volumes:
       - users_storage:/var/lib/postgresql/data
     networks:
-      - user-network
+      - booking-network
 
-  booking_user_service:
-    container_name: booking_users_service
+  property_db:
+    image: postgres:17-alpine
+    container_name: property_db
+    restart: always
+    ports:
+      - 9433:5433
+    environment:
+      - POSTGRES_PASSWORD: postgres
+    volumes:
+      - property_storage:/var/lib/postgresql/data
+    networks:
+      - booking-network
+  
+  user_service:
+    container_name: users_service
     build: 
       context: ./user-service
       dockerfile: ./Dockerfile
     ports: 
       - 9001:9001
     depends_on:
-      - booking_users_db
+      - users_db
     volumes:
       - ./user-service:/app
       - /app/node_modules
     networks:
-      - user-network
+      - booking-network
     env_file:
       - ./user-service/.env-dev
-      
+  
+  property_service:
+    container_name: property_service
+    build:
+      context: ./property-service
+      dockerfile: ./Dockerfile
+    ports:
+      - 9002:9002
+    depends_on:
+      - property_db
+    volumes:
+      - ./property-service:/app
+      - /app/node_modules
+    networks:
+      - booking-network
+    env_file:
+      - ./property-service/.env-dev
+  
   api_gateway:
     container_name: nginx_api_gateway
     build: 
@@ -39,12 +69,14 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
-      - user-network
+      - booking-network
     depends_on:
-      - booking_user_service
+      - user_service
+      - property_service
 
 volumes:
   users_storage:
+  property_storage:
 
 networks:
-  user-network:
+  booking-network:

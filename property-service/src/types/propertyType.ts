@@ -1,0 +1,16 @@
+enum PropertyType {
+  APARTMENT = "APARTMENT",
+  HOTEL = "HOTEL",
+  GUEST_HOUSE = "GUEST_HOUSE",
+  HOSTEL = "HOSTEL",
+  HOMESTAY = "HOMESTAY",
+  BED_AND_BREAKFAST = "BED_AND_BREAKFAST",
+  HOLIDAY_HOME = "HOLIDAY_HOME",
+  VILLA = "VILLA",
+  MOTEL = "MOTEL",
+  BOAT = "BOAT",
+  CHALET = "CHALET",
+  RESORT = "RESORT"
+}
+
+export default PropertyType;

@@ -20,49 +20,58 @@ export class User extends BaseEntity {
   id: string;
 
   @Column({
+    name: "first_name",
     type: "citext",
     nullable: true
   })
-  first_name: string;
+  firstName: string;
 
   @Column({
+    name: "last_name",
     type: "citext",
     nullable: true
   })
-  last_name: string;
+  lastName: string;
 
   @Column({
+    name: "display_name",
     type: "citext",
     nullable: true
   })
-  display_name: string;
+  displayName: string;
 
   @Column({
+    name: "phone_number",
     type: "citext",
     nullable: true
   })
-  phone_number: string;
+  phoneNumber: string;
 
   @Column({
+    name: "date_of_birth",
     type: "timestamp without time zone",
     nullable: true
   })
-  date_of_birth: Date;
+  dateOfBirth: Date;
 
   @Column({
+    name: "nationality",
     type: "citext",
     nullable: true
   })
   nationality: string;
 
   @Column({
+    name: "gender",
     type: "enum",
     enum: Gender
   })
   gender: Gender;
 
-  @OneToOne(() => Auth, { cascade: ["remove", "insert"],
-    eager: true })
+  @OneToOne(() => Auth, {
+    cascade: ["remove", "insert"],
+    eager: true
+  })
   @JoinColumn({ name: "auth_id" })
   auth: Auth;
 }

@@ -13,7 +13,7 @@ export const createProfileSchema: ValidationChain[] = checkSchema({
       errorMessage: "Email is in wrong format"
     }
   },
-  first_name: {
+  firstName: {
     notEmpty: {
       errorMessage: "First name is required"
     },
@@ -21,7 +21,7 @@ export const createProfileSchema: ValidationChain[] = checkSchema({
       errorMessage: "First name should be text"
     }
   },
-  last_name: {
+  lastName: {
     notEmpty: {
       errorMessage: "Last name is required"
     },
@@ -29,7 +29,7 @@ export const createProfileSchema: ValidationChain[] = checkSchema({
       errorMessage: "Last name should be text"
     }
   },
-  display_name: {
+  displayName: {
     optional: true,
     isLength: {
       errorMessage: "Display name must be at least 5 characters long",
@@ -38,7 +38,7 @@ export const createProfileSchema: ValidationChain[] = checkSchema({
       }
     }
   },
-  phone_number: {
+  phoneNumber: {
     notEmpty: {
       errorMessage: "Mobile phone is required"
     },
@@ -46,7 +46,7 @@ export const createProfileSchema: ValidationChain[] = checkSchema({
       errorMessage: "Phone number is in wrong format"
     }
   },
-  date_of_birth: {
+  dateOfBirth: {
     isDate: {
       errorMessage: "Date is invalid"
     }
@@ -77,19 +77,19 @@ export const updateProfileSchema: ValidationChain[] = checkSchema({
       errorMessage: "Email is in wrong format"
     }
   },
-  first_name: {
+  firstName: {
     optional: true,
     isString: {
       errorMessage: "First name should be text"
     }
   },
-  last_name: {
+  lastName: {
     optional: true,
     isString: {
       errorMessage: "Last name should be text"
     }
   },
-  display_name: {
+  displayName: {
     optional: true,
     isLength: {
       errorMessage: "Display name must be at least 5 characters long",
@@ -98,13 +98,13 @@ export const updateProfileSchema: ValidationChain[] = checkSchema({
       }
     }
   },
-  phone_number: {
+  phoneNumber: {
     optional: true,
     isMobilePhone: {
       errorMessage: "Phone number is in wrong format"
     }
   },
-  date_of_birth: {
+  dateOfBirth: {
     optional: true,
     isDate: {
       errorMessage: "Date is invalid"

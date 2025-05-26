@@ -12,11 +12,11 @@ class UserController {
   create = async (req: Request, res: Response) => {
     const {
       email,
-      first_name,
-      last_name,
-      display_name,
-      phone_number,
-      date_of_birth,
+      firstName,
+      lastName,
+      displayName,
+      phoneNumber,
+      dateOfBirth,
       nationality,
       gender
     } = req.body;
@@ -28,18 +28,18 @@ class UserController {
 
     let user = new User();
 
-    user.first_name = first_name;
-    user.last_name = last_name;
-    user.phone_number = phone_number;
-    user.date_of_birth = date_of_birth;
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.phoneNumber = phoneNumber;
+    user.dateOfBirth = dateOfBirth;
     user.nationality = nationality;
     user.gender = gender;
     user.auth = auth;
 
-    if (display_name) {
-      user.display_name = display_name;
+    if (displayName) {
+      user.displayName = displayName;
     } else {
-      user.display_name = `${user.first_name} ${user.last_name}`;
+      user.displayName = `${user.firstName} ${user.lastName}`;
     }
 
     try {

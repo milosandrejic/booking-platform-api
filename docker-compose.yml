@@ -9,6 +9,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - users_storage:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
     networks:
       - booking-network
 
@@ -17,11 +18,12 @@ services:
     container_name: property_db
     restart: always
     ports:
-      - 9433:5433
+      - 9433:5432
     environment:
-      - POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - property_storage:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
     networks:
       - booking-network
   

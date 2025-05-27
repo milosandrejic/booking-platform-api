@@ -60,7 +60,6 @@ describe("UserController", () => {
         email_verified: false,
         password: "hashed_password",
         role: Role.USER,
-        access_token: "",
         created_at: new Date(),
         user: undefined
       } as Partial<Auth>;
@@ -100,7 +99,6 @@ describe("UserController", () => {
         email_verified: false,
         password: "hashed_password",
         role: Role.USER,
-        access_token: "",
         created_at: new Date(),
         user: undefined
       } as Partial<Auth>;
@@ -148,7 +146,6 @@ describe("UserController", () => {
         email_verified: false,
         password: "hashed_password",
         role: Role.USER,
-        access_token: "",
         created_at: new Date(),
         user: undefined
       } as Partial<Auth>;
@@ -213,7 +210,6 @@ describe("UserController", () => {
         email_verified: false,
         password: "hashed_password",
         role: Role.USER,
-        access_token: "",
         created_at: new Date(),
         user: undefined
       } as Partial<Auth>;

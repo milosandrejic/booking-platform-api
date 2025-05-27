@@ -28,7 +28,7 @@ class AuthController {
       return;
     }
 
-    const access_token = jwt.sign(
+    const accessToken = jwt.sign(
       {
         id: auth.id,
         email: auth.email,
@@ -37,11 +37,13 @@ class AuthController {
       process.env.JWT_SECRET as string
     );
 
-    auth.access_token = access_token;
-
     authRepository.save(auth);
 
-    res.send({ access_token });
+    res.send({ accessToken });
+  };
+
+  internalAuth = async (req: Request, res: Response) => {
+    res.send(req.auth.id);
   };
 }
 

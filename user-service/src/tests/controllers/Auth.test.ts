@@ -59,20 +59,17 @@ describe("AuthController", () => {
       );
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
-      expect(responseObject).toEqual({
-        error: "User with email test@example.com does no exists"
-      });
+      expect(responseObject).toEqual({ error: "User with email test@example.com does no exists" });
     });
 
     it("should return 400 if password is incorrect", async () => {
       const mockAuth = {
         id: "1",
         email: "test@example.com",
-        email_verified: false,
+        emailVerified: false,
         password: "hashed_password",
         role: Role.USER,
-        access_token: "",
-        created_at: new Date(),
+        createdAt: new Date(),
         user: undefined
       } as Partial<Auth>;
 
@@ -85,20 +82,17 @@ describe("AuthController", () => {
       );
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
-      expect(responseObject).toEqual({
-        error: "Wrong email or password"
-      });
+      expect(responseObject).toEqual({ error: "Wrong email or password" });
     });
 
     it("should return token on successful login", async () => {
       const mockAuth = {
         id: "1",
         email: "test@example.com",
-        email_verified: false,
+        emailVerified: false,
         password: "hashed_password",
         role: Role.USER,
-        access_token: "",
-        created_at: new Date(),
+        createdAt: new Date(),
         user: undefined
       } as Partial<Auth>;
 
@@ -113,9 +107,21 @@ describe("AuthController", () => {
         mockResponse as unknown as Response
       );
 
-      expect(responseObject).toEqual({
-        access_token: mockToken
-      });
+      expect(responseObject).toEqual({ accessToken: mockToken });
+    });
+  });
+
+  describe("internalAuth", () => {
+    it("should send the auth id from req.auth", async () => {
+      const mockAuthId = "test-auth-id";
+      mockRequest.auth = { id: mockAuthId } as any;
+
+      await authController.internalAuth(
+        mockRequest as Request,
+        mockResponse as unknown as Response
+      );
+
+      expect(mockResponse.send).toHaveBeenCalledWith(mockAuthId);
     });
   });
 });

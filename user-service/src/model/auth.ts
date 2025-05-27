@@ -29,7 +29,7 @@ export class Auth extends BaseEntity {
     type: "boolean",
     default: false
   })
-  email_verified: boolean;
+  emailVerified: boolean;
 
   @Column({
     type: "text",
@@ -44,14 +44,8 @@ export class Auth extends BaseEntity {
   })
   role: Role;
 
-  @Column({
-    type: "text",
-    nullable: true
-  })
-  access_token: string;
-
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @OneToOne(() => User)
   user: User;

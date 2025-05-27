@@ -43,7 +43,9 @@ class AuthController {
   };
 
   internalAuth = async (req: Request, res: Response) => {
-    res.send(req.auth.id);
+    res.send({
+      id: req.auth.id
+    });
   };
 }
 

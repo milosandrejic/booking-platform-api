@@ -1,3 +1,4 @@
+import "express";
 import { Auth } from "src/model";
 
 declare global {

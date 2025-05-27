@@ -7,6 +7,7 @@ import {
   BaseEntity,
   ManyToOne
 } from "typeorm";
+
 import Property from "./Property";
 
 @Entity("property_reviews")

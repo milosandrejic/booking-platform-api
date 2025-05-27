@@ -66,14 +66,15 @@ export const withAuth = async (req: Request, res: Response, next: NextFunction) 
   }
 
   req.auth = auth;
+
   next();
 };
 
 export const withInternalAuth = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers?.["x-authorization"] as string;
-  const serviceNameHeder = req.headers?.["x-service-name"] as string;
+  const serviceNameHeader = req.headers?.["x-service-name"] as string;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ") || !serviceNameHeder) {
+  if (!authHeader || !authHeader.startsWith("Bearer ") || !serviceNameHeader) {
     res.status(401).send({
       error: "Unauthorized."
     });
@@ -94,7 +95,7 @@ export const withInternalAuth = async (req: Request, res: Response, next: NextFu
     return;
   }
 
-  if (decodedToken?.service !== serviceNameHeder) {
+  if (decodedToken?.service !== serviceNameHeader) {
     res.status(401).send({
       error: "Unauthorized."
     });

@@ -1,29 +1,16 @@
-import {
-  Request,
-  Response,
-  NextFunction
-} from "express";
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 
-import userServiceApi from "src/utils/api";
+interface JwtPayload {
+  id: string;
+  email: string;
+  role: string;
+}
 
-const resolveAuth = async (accessToken: string): Promise<string | null> => {
-  if (!accessToken) {
-    return null;
-  }
+export const withAuth = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
 
-  try {
-    const response = await userServiceApi.post<{ id: string }>("/internal-auth");
-
-    return response.data.id;
-  } catch {
-    return null;
-  }
-};
-
-export const withAuth = async (req: Request, res: Response, next: NextFunction) => {
-  const accessToken = req.headers.authorization ?? "";
-
-  if (!accessToken) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     res.status(401).send({
       error: "Unauthorized"
     });
@@ -31,25 +18,21 @@ export const withAuth = async (req: Request, res: Response, next: NextFunction) 
     return;
   }
 
+  const token = authHeader.split(" ")[1];
+
   try {
-    const response = await userServiceApi.post<{ id: string }>("/internal-auth", {}, {
-      headers: {
-        Authorization: accessToken
-      }
-    });
+    const payload = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
 
-    const userId = response.data.id;
-
-    req.userId = userId;
+    req.auth = {
+      id: payload.id,
+      email: payload.email,
+      role: payload.role
+    };
 
     next();
   } catch {
     res.status(401).send({
-      error: "Unauthorized."
+      error: "Unauthorized"
     });
-
-    return;
   }
 };
-
-export { resolveAuth };

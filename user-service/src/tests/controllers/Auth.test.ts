@@ -113,15 +113,14 @@ describe("AuthController", () => {
 
   describe("internalAuth", () => {
     it("should send the auth id from req.auth", async () => {
-      const mockAuthId = "test-auth-id";
-      mockRequest.auth = { id: mockAuthId } as any;
+      mockRequest.auth = { id: "test-auth-id" } as any;
 
       await authController.internalAuth(
         mockRequest as Request,
         mockResponse as unknown as Response
       );
 
-      expect(mockResponse.send).toHaveBeenCalledWith(mockAuthId);
+      expect(mockResponse.send).toHaveBeenCalledWith({ id: "test-auth-id" });
     });
   });
 });

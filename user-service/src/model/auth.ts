@@ -5,7 +5,8 @@ import {
   BaseEntity,
   OneToOne,
   Unique,
-  CreateDateColumn
+  CreateDateColumn,
+  UpdateDateColumn
 } from "typeorm";
 
 import { User } from "src/model";
@@ -46,6 +47,9 @@ export class Auth extends BaseEntity {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @OneToOne(() => User)
   user: User;

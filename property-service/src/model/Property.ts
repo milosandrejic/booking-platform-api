@@ -15,7 +15,7 @@ export class Property extends BaseEntity {
   id: string;
 
   @Column({
-    name: "owner_id",
+    name: "ownerId",
     type: "uuid"
   })
   ownerId: string;
@@ -37,7 +37,7 @@ export class Property extends BaseEntity {
   location: object;
 
   @Column({
-    name: "address_line",
+    name: "addressLine",
     type: "citext"
   })
   addressLine: string;
@@ -49,7 +49,7 @@ export class Property extends BaseEntity {
   state: string;
 
   @Column({
-    name: "postal_code",
+    name: "postalCode",
     type: "citext"
   })
   postalCode: string;
@@ -58,7 +58,7 @@ export class Property extends BaseEntity {
   country: string;
 
   @Column({
-    name: "is_active",
+    name: "isActive",
     default: true
   })
   isActive: boolean;
@@ -72,10 +72,10 @@ export class Property extends BaseEntity {
   })
   facilities: string[];
 
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: "createdAt" })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: "updatedAt" })
   updatedAt: Date;
 }
 

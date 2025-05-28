@@ -28,6 +28,7 @@ export default defineConfig([
     rules: {
       semi: "error",
       curly: "error",
+      camelcase: ["error", { properties: "always" }],
       "@stylistic/array-element-newline": ["warn", { multiline: true, minItems: 4 }],
       "@stylistic/arrow-parens": ["warn", "as-needed", { requireForBlockBody: true }],
       "@stylistic/dot-location": ["warn", "property"],

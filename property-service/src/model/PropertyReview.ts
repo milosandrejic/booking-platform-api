@@ -10,19 +10,19 @@ import {
 
 import Property from "./Property";
 
-@Entity("property_reviews")
+@Entity("propertyReviews")
 export class PropertyReview extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({
-    name: "property_id",
+    name: "propertyId",
     type: "uuid"
   })
   propertyId: string;
 
   @Column({
-    name: "user_id",
+    name: "userId",
     type: "uuid"
   })
   userId: string;
@@ -37,10 +37,10 @@ export class PropertyReview extends BaseEntity {
   })
   comment: string;
 
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: "createdAt" })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: "updatedAt" })
   updatedAt: Date;
 
   @ManyToOne(() => Property, property => property.id)

@@ -22,7 +22,7 @@ export class Auth1743693098091 implements MigrationInterface {
           isNullable: true
         },
         {
-          name: "email_verified",
+          name: "emailVerified",
           type: "boolean",
           default: false
         },
@@ -30,10 +30,15 @@ export class Auth1743693098091 implements MigrationInterface {
           name: "role",
           type: "enum",
           enum: ["USER", "CLIENT", "ADMIN"],
-          enumName: "role_enum"
+          enumName: "roleEnum"
         },
         {
-          name: "created_at",
+          name: "createdAt",
+          type: "timestamp",
+          default: "now()"
+        },
+        {
+          name: "updatedAt",
           type: "timestamp",
           default: "now()"
         }

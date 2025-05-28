@@ -27,10 +27,10 @@ describe("UserController", () => {
     mockRequest = {
       body: {
         email: "test@example.com",
-        first_name: "John",
-        last_name: "Doe",
-        phone_number: "+1234567890",
-        date_of_birth: "1990-01-01",
+        firstName: "John",
+        lastName: "Doe",
+        phoneNumber: "+1234567890",
+        dateOfBirth: "1990-01-01",
         nationality: "US",
         gender: Gender.MALE
       },
@@ -57,20 +57,20 @@ describe("UserController", () => {
       const mockAuth = {
         id: "1",
         email: "test@example.com",
-        email_verified: false,
+        emailVerified: false,
         password: "hashed_password",
         role: Role.USER,
-        created_at: new Date(),
+        createdAt: new Date(),
         user: undefined
       } as Partial<Auth>;
 
       const mockUser = {
         id: "123",
-        first_name: "John",
-        last_name: "Doe",
-        display_name: "John Doe",
-        phone_number: "+1234567890",
-        date_of_birth: new Date("1990-01-01"),
+        firstName: "John",
+        lastName: "Doe",
+        displayName: "John Doe",
+        phoneNumber: "+1234567890",
+        dateOfBirth: new Date("1990-01-01"),
         nationality: "US",
         gender: Gender.MALE,
         auth: mockAuth
@@ -90,26 +90,26 @@ describe("UserController", () => {
     it("should create a new user with custom display name", async () => {
       mockRequest.body = {
         ...mockRequest.body,
-        display_name: "Custom Name"
+        displayName: "Custom Name"
       };
 
       const mockAuth = {
         id: "1",
         email: "test@example.com",
-        email_verified: false,
+        emailVerified: false,
         password: "hashed_password",
         role: Role.USER,
-        created_at: new Date(),
+        createdAt: new Date(),
         user: undefined
       } as Partial<Auth>;
 
       const mockUser = {
         id: "123",
-        first_name: "John",
-        last_name: "Doe",
-        display_name: "Custom Name",
-        phone_number: "+1234567890",
-        date_of_birth: new Date("1990-01-01"),
+        firstName: "John",
+        lastName: "Doe",
+        displayName: "Custom Name",
+        phoneNumber: "+1234567890",
+        dateOfBirth: new Date("1990-01-01"),
         nationality: "US",
         gender: Gender.MALE,
         auth: mockAuth
@@ -143,28 +143,28 @@ describe("UserController", () => {
       const mockAuth = {
         id: "1",
         email: "test@example.com",
-        email_verified: false,
+        emailVerified: false,
         password: "hashed_password",
         role: Role.USER,
-        created_at: new Date(),
+        createdAt: new Date(),
         user: undefined
       } as Partial<Auth>;
 
       const existingUser = {
         id: "123",
-        first_name: "John",
-        last_name: "Doe",
-        display_name: "John Doe",
-        phone_number: "+1234567890",
-        date_of_birth: new Date("1990-01-01"),
+        firstName: "John",
+        lastName: "Doe",
+        displayName: "John Doe",
+        phoneNumber: "+1234567890",
+        dateOfBirth: new Date("1990-01-01"),
         nationality: "US",
         gender: Gender.MALE,
         auth: mockAuth
       } as Partial<User>;
 
       const updatedData = {
-        first_name: "Jane",
-        last_name: "Smith"
+        firstName: "Jane",
+        lastName: "Smith"
       };
 
       mockRequest.body = updatedData;
@@ -207,20 +207,20 @@ describe("UserController", () => {
       const mockAuth = {
         id: "1",
         email: "test@example.com",
-        email_verified: false,
+        emailVerified: false,
         password: "hashed_password",
         role: Role.USER,
-        created_at: new Date(),
+        createdAt: new Date(),
         user: undefined
       } as Partial<Auth>;
 
       const mockUser = {
         id: "123",
-        first_name: "John",
-        last_name: "Doe",
-        display_name: "John Doe",
-        phone_number: "+1234567890",
-        date_of_birth: new Date("1990-01-01"),
+        firstName: "John",
+        lastName: "Doe",
+        displayName: "John Doe",
+        phoneNumber: "+1234567890",
+        dateOfBirth: new Date("1990-01-01"),
         nationality: "US",
         gender: Gender.MALE,
         auth: mockAuth

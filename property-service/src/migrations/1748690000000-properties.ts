@@ -13,7 +13,7 @@ export class Properties1748690000000 implements MigrationInterface {
           default: "uuid_generate_v4()"
         },
         {
-          name: "owner_id",
+          name: "ownerId",
           type: "uuid",
           isNullable: false
         },
@@ -38,7 +38,7 @@ export class Properties1748690000000 implements MigrationInterface {
           isNullable: false
         },
         {
-          name: "address_line",
+          name: "addressLine",
           type: "citext",
           isNullable: false
         },
@@ -53,7 +53,7 @@ export class Properties1748690000000 implements MigrationInterface {
           isNullable: false
         },
         {
-          name: "postal_code",
+          name: "postalCode",
           type: "citext",
           isNullable: false
         },
@@ -63,7 +63,7 @@ export class Properties1748690000000 implements MigrationInterface {
           isNullable: false
         },
         {
-          name: "is_active",
+          name: "isActive",
           type: "boolean",
           isNullable: false,
           default: true
@@ -80,12 +80,12 @@ export class Properties1748690000000 implements MigrationInterface {
           default: "'{}'"
         },
         {
-          name: "created_at",
+          name: "createdAt",
           type: "timestamp",
           default: "now()"
         },
         {
-          name: "updated_at",
+          name: "updatedAt",
           type: "timestamp",
           default: "now()"
         }

@@ -20,35 +20,35 @@ export class User extends BaseEntity {
   id: string;
 
   @Column({
-    name: "first_name",
+    name: "firstName",
     type: "citext",
     nullable: true
   })
   firstName: string;
 
   @Column({
-    name: "last_name",
+    name: "lastName",
     type: "citext",
     nullable: true
   })
   lastName: string;
 
   @Column({
-    name: "display_name",
+    name: "displayName",
     type: "citext",
     nullable: true
   })
   displayName: string;
 
   @Column({
-    name: "phone_number",
+    name: "phoneNumber",
     type: "citext",
     nullable: true
   })
   phoneNumber: string;
 
   @Column({
-    name: "date_of_birth",
+    name: "dateOfBirth",
     type: "timestamp without time zone",
     nullable: true
   })
@@ -72,6 +72,6 @@ export class User extends BaseEntity {
     cascade: ["remove", "insert"],
     eager: true
   })
-  @JoinColumn({ name: "auth_id" })
+  @JoinColumn({ name: "authId" })
   auth: Auth;
 }

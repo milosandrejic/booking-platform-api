@@ -1,7 +1,8 @@
 import {
   MigrationInterface,
   QueryRunner,
-  Table
+  Table,
+  TableForeignKey
 } from "typeorm";
 
 export class User1743694144733 implements MigrationInterface {
@@ -17,24 +18,29 @@ export class User1743694144733 implements MigrationInterface {
           default: "uuid_generate_v4()"
         },
         {
-          name: "first_name",
+          name: "authId",
+          type: "uuid",
+          isNullable: false
+        },
+        {
+          name: "firstName",
           type: "citext"
         },
         {
-          name: "last_name",
+          name: "lastName",
           type: "citext"
         },
         {
-          name: "display_name",
+          name: "displayName",
           type: "citext"
         },
         {
-          name: "phone_number",
+          name: "phoneNumber",
           type: "citext",
           isNullable: true
         },
         {
-          name: "date_of_birth",
+          name: "dateOfBirth",
           type: "timestamp without time zone",
           isNullable: true
         },
@@ -47,10 +53,20 @@ export class User1743694144733 implements MigrationInterface {
           name: "gender",
           type: "enum",
           enum: ["male", "female"],
-          enumName: "gender_enum"
+          enumName: "genderEnum"
         }
       ]
     }));
+
+    await queryRunner.createForeignKey(
+      "user",
+      new TableForeignKey({
+        columnNames: ["authId"],
+        referencedTableName: "auth",
+        referencedColumnNames: ["id"],
+        onDelete: "CASCADE"
+      })
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

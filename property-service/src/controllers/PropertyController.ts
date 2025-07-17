@@ -3,7 +3,7 @@ import Property from "../model/Property";
 import { propertyRepository } from "../repositories";
 
 class PropertyController {
-  create = async (req: Request, res: Response) => {
+  static create = async (req: Request, res: Response) => {
     const {
       ownerId,
       title,
@@ -45,7 +45,7 @@ class PropertyController {
     }
   };
 
-  update = async (req: Request, res: Response) => {
+  static update = async (req: Request, res: Response) => {
     let property = await propertyRepository.findOneBy({ id: req.params.id });
 
     if (!property) {
@@ -65,7 +65,7 @@ class PropertyController {
     res.send(property);
   };
 
-  get = async (req: Request, res: Response) => {
+  static get = async (req: Request, res: Response) => {
     const property = await propertyRepository.findOneBy({ id: req.params.id });
 
     if (!property) {
@@ -77,7 +77,7 @@ class PropertyController {
     res.send(property);
   };
 
-  delete = async (req: Request, res: Response) => {
+  static delete = async (req: Request, res: Response) => {
     const property = await propertyRepository.findOneBy({ id: req.params.id });
 
     if (!property) {
@@ -91,11 +91,11 @@ class PropertyController {
     res.sendStatus(204);
   };
 
-  listForUser = async (req: Request, res: Response) => {
+  static listForUser = async (req: Request, res: Response) => {
     const properties = await propertyRepository.find({ ownerId: req.params.ownerId });
 
     res.send(properties);
   };
 }
 
-export default new PropertyController();
+export default PropertyController;

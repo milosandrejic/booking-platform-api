@@ -3,7 +3,7 @@ import PropertyReview from "../model/PropertyReview";
 import { propertyReviewRepository } from "../repositories";
 
 class PropertyReviewController {
-  create = async (req: Request, res: Response) => {
+  static create = async (req: Request, res: Response) => {
     const {
       propertyId,
       userId,
@@ -26,7 +26,7 @@ class PropertyReviewController {
     }
   };
 
-  update = async (req: Request, res: Response) => {
+  static update = async (req: Request, res: Response) => {
     let review = await propertyReviewRepository.findOneBy({ id: req.params.id });
 
     if (!review) {
@@ -45,7 +45,7 @@ class PropertyReviewController {
     res.send(review);
   };
 
-  get = async (req: Request, res: Response) => {
+  static get = async (req: Request, res: Response) => {
     const review = await propertyReviewRepository.findOneBy({ id: req.params.id });
 
     if (!review) {
@@ -57,7 +57,7 @@ class PropertyReviewController {
     res.send(review);
   };
 
-  delete = async (req: Request, res: Response) => {
+  static delete = async (req: Request, res: Response) => {
     const review = await propertyReviewRepository.findOneBy({ id: req.params.id });
 
     if (!review) {
@@ -71,7 +71,7 @@ class PropertyReviewController {
     res.sendStatus(204);
   };
 
-  listForProperty = async (req: Request, res: Response) => {
+  static listForProperty = async (req: Request, res: Response) => {
     const reviews = await propertyReviewRepository.find({ propertyId: req.params.propertyId });
 
     res.send(reviews);

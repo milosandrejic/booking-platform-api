@@ -9,7 +9,7 @@ import {
 import { userRepository } from "src/repositories";
 
 class UserController {
-  create = async (req: Request, res: Response) => {
+  static create = async (req: Request, res: Response) => {
     const {
       email,
       firstName,
@@ -51,7 +51,7 @@ class UserController {
     }
   };
 
-  update = async (req: Request, res: Response) => {
+  static update = async (req: Request, res: Response) => {
     let user = await userRepository.findOneBy({ id: req.params.id });
 
     if (!user) {
@@ -73,7 +73,7 @@ class UserController {
     res.send(user);
   };
 
-  get = async (req: Request, res: Response) => {
+  static get = async (req: Request, res: Response) => {
     const user = await userRepository.findOneBy({ id: req.params.id });
 
     if (!user) {
@@ -88,4 +88,4 @@ class UserController {
   };
 }
 
-export default new UserController();
+export default UserController;

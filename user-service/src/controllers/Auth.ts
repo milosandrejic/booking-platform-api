@@ -5,7 +5,7 @@ import { authRepository } from "src/repositories";
 import { PasswordUtils } from "src/utils/passwordUtils";
 
 class AuthController {
-  login = async (req: Request, res: Response) => {
+  static login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     const auth = await authRepository.findOneBy({ email });
@@ -42,11 +42,11 @@ class AuthController {
     res.send({ accessToken });
   };
 
-  internalAuth = async (req: Request, res: Response) => {
+  static internalAuth = async (req: Request, res: Response) => {
     res.send({
       id: req.auth.id
     });
   };
 }
 
-export default new AuthController();
+export default AuthController;

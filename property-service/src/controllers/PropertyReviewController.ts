@@ -78,4 +78,4 @@ class PropertyReviewController {
   };
 }
 
-export default new PropertyReviewController();
+export default PropertyReviewController;

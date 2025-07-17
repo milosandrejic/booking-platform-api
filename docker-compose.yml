@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   users_db:
     image: postgres:17-alpine
@@ -37,13 +39,12 @@ services:
     depends_on:
       - users_db
     volumes:
-      - ./user-service:/app
-      - /app/node_modules
+      - ./user-service/src:/app/src
+      - ./user-service/tsconfig.json:/app/tsconfig.json
+      - ./user-service/.env-dev:/app/.env
     networks:
       - booking-network
-    env_file:
-      - ./user-service/.env-dev
-  
+
   property_service:
     container_name: property_service
     build:
@@ -54,12 +55,11 @@ services:
     depends_on:
       - property_db
     volumes:
-      - ./property-service:/app
-      - /app/node_modules
+      - ./property-service/src:/app/src
+      - ./property-service/tsconfig.json:/app/tsconfig.json
+      - ./property-service/.env-dev:/app/.env
     networks:
       - booking-network
-    env_file:
-      - ./property-service/.env-dev
   
   api_gateway:
     container_name: nginx_api_gateway

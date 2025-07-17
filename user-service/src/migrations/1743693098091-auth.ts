@@ -29,7 +29,7 @@ export class Auth1743693098091 implements MigrationInterface {
         {
           name: "role",
           type: "enum",
-          enum: ["USER", "CLIENT", "ADMIN"],
+          enum: ["USER", "OWNER", "ADMIN"],
           enumName: "roleEnum"
         },
         {

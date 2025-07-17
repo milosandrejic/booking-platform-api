@@ -13,7 +13,7 @@ import { User } from "src/model";
 
 export enum Role {
   USER = "USER",
-  CLIENT = "CLIENT",
+  OWNER = "OWNER",
   ADMIN = "ADMIN"
 }
 

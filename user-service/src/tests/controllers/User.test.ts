@@ -1,14 +1,26 @@
 import { Request, Response } from "express";
 import { Role, Gender } from "src/model";
-import { userRepository } from "src/repositories";
+import { userRepository, authRepository } from "src/repositories";
 import userController from "src/controllers/User";
 import { describe, expect, jest, beforeEach, it } from "@jest/globals";
 import { User, Auth } from "src/model";
+import { PasswordUtils } from "src/utils/passwordUtils";
 
 jest.mock("src/repositories", () => ({
   userRepository: {
     findOneBy: jest.fn(),
+    save: jest.fn(),
+    findOneByAuthId: jest.fn(),
+    findOneWithAuth: jest.fn()
+  },
+  authRepository: {
     save: jest.fn()
+  }
+}));
+
+jest.mock("src/utils/passwordUtils", () => ({
+  PasswordUtils: {
+    hash: jest.fn()
   }
 }));
 
@@ -248,6 +260,185 @@ describe("UserController", () => {
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(responseObject).toEqual({
         error: "User not found"
+      });
+    });
+  });
+
+  describe("me", () => {
+    it("should return current user data", async () => {
+      const mockUser = {
+        id: "123",
+        firstName: "John",
+        lastName: "Doe",
+        auth: {
+          id: "auth-123",
+          email: "test@example.com",
+          role: Role.USER
+        }
+      };
+
+      mockRequest.auth = {
+        id: "auth-123",
+        email: "test@example.com",
+        role: Role.USER,
+        emailVerified: true,
+        password: "hashedPassword",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      } as Auth;
+
+      jest.spyOn(userRepository, "findOneByAuthId").mockResolvedValue(mockUser as any);
+
+      await userController.me(
+        mockRequest as Request,
+        mockResponse as unknown as Response
+      );
+
+      expect(userRepository.findOneByAuthId).toHaveBeenCalledWith("auth-123");
+      expect(mockResponse.send).toHaveBeenCalledWith(mockUser);
+    });
+
+    it("should return 404 if user not found", async () => {
+      mockRequest.auth = {
+        id: "auth-123",
+        email: "test@example.com",
+        role: Role.USER,
+        emailVerified: true,
+        password: "hashedPassword",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      } as Auth;
+
+      jest.spyOn(userRepository, "findOneByAuthId").mockResolvedValue(null);
+
+      await userController.me(
+        mockRequest as Request,
+        mockResponse as unknown as Response
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(responseObject).toEqual({
+        error: "User not found"
+      });
+    });
+
+    it("should return 500 if repository throws error", async () => {
+      mockRequest.auth = {
+        id: "auth-123",
+        email: "test@example.com",
+        role: Role.USER,
+        emailVerified: true,
+        password: "hashedPassword",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      } as Auth;
+
+      jest.spyOn(userRepository, "findOneByAuthId").mockRejectedValue(new Error("Database error"));
+
+      await userController.me(
+        mockRequest as Request,
+        mockResponse as unknown as Response
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(500);
+      expect(responseObject).toEqual({
+        error: "Internal server error"
+      });
+    });
+  });
+
+  describe("resetPassword", () => {
+    beforeEach(() => {
+      mockRequest.body = {
+        newPassword: "newPassword123"
+      };
+    });
+
+    it("should reset password successfully", async () => {
+      const mockUser = {
+        id: "123",
+        firstName: "John",
+        lastName: "Doe",
+        auth: {
+          id: "auth-123",
+          email: "test@example.com",
+          role: Role.USER,
+          password: "oldHashedPassword"
+        }
+      };
+
+      jest.spyOn(userRepository, "findOneWithAuth").mockResolvedValue(mockUser as any);
+      jest.spyOn(PasswordUtils, "hash").mockResolvedValue("newHashedPassword");
+      jest.spyOn(authRepository, "save").mockResolvedValue(mockUser.auth as any);
+
+      await userController.resetPassword(
+        mockRequest as Request,
+        mockResponse as unknown as Response
+      );
+
+      expect(userRepository.findOneWithAuth).toHaveBeenCalledWith("123");
+      expect(PasswordUtils.hash).toHaveBeenCalledWith("newPassword123");
+      expect(authRepository.save).toHaveBeenCalledWith({
+        ...mockUser.auth,
+        password: "newHashedPassword"
+      });
+      expect(mockResponse.send).toHaveBeenCalledWith({
+        message: "Password reset successful"
+      });
+    });
+
+    it("should return 404 if user not found", async () => {
+      jest.spyOn(userRepository, "findOneWithAuth").mockResolvedValue(null);
+
+      await userController.resetPassword(
+        mockRequest as Request,
+        mockResponse as unknown as Response
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
+      expect(responseObject).toEqual({
+        error: "User not found"
+      });
+    });
+
+    it("should return 400 if newPassword is missing", async () => {
+      mockRequest.body = {};
+
+      const mockUser = {
+        id: "123",
+        firstName: "John",
+        lastName: "Doe",
+        auth: {
+          id: "auth-123",
+          email: "test@example.com",
+          role: Role.USER
+        }
+      };
+
+      jest.spyOn(userRepository, "findOneWithAuth").mockResolvedValue(mockUser as any);
+
+      await userController.resetPassword(
+        mockRequest as Request,
+        mockResponse as unknown as Response
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(responseObject).toEqual({
+        error: "New password is required"
+      });
+    });
+
+    it("should return 500 if repository throws error", async () => {
+      jest.spyOn(userRepository, "findOneWithAuth").mockRejectedValue(new Error("Database error"));
+
+      await userController.resetPassword(
+        mockRequest as Request,
+        mockResponse as unknown as Response
+      );
+
+      expect(mockResponse.status).toHaveBeenCalledWith(500);
+      expect(responseObject).toEqual({
+        error: "Internal server error"
       });
     });
   });

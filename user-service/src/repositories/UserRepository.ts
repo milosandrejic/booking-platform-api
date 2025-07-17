@@ -42,4 +42,11 @@ export class UserRepository {
       relations: ["auth"]
     });
   };
+
+  findOneByAuthId = async (authId: string): Promise<User | null> => {
+    return this.repository.findOne({
+      where: { auth: { id: authId } },
+      relations: ["auth"]
+    });
+  };
 }

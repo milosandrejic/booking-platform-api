@@ -124,3 +124,20 @@ export const updateProfileSchema: ValidationChain[] = checkSchema({
     }
   }
 });
+
+export const resetPasswordSchema: ValidationChain[] = checkSchema({
+  newPassword: {
+    notEmpty: {
+      errorMessage: "New password is required"
+    },
+    isLength: {
+      errorMessage: "Password must be at least 8 characters long",
+      options: {
+        min: 8
+      }
+    },
+    isString: {
+      errorMessage: "Password should be text"
+    }
+  }
+});

@@ -6,7 +6,8 @@ import {
   Role
 } from "src/model";
 
-import { userRepository } from "src/repositories";
+import { userRepository, authRepository } from "src/repositories";
+import { PasswordUtils } from "src/utils/passwordUtils";
 
 class UserController {
   static create = async (req: Request, res: Response) => {
@@ -85,6 +86,72 @@ class UserController {
     }
 
     res.send(user);
+  };
+
+  static me = async (req: Request, res: Response) => {
+    try {
+      const user = await userRepository.findOneByAuthId(req.auth.id);
+
+      if (!user) {
+        res.status(404).send({
+          error: "User not found"
+        });
+
+        return;
+      }
+
+      res.send(user);
+    } catch {
+      res.status(500).send({
+        error: "Internal server error"
+      });
+    }
+  };
+
+  static resetPassword = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { newPassword } = req.body;
+
+    try {
+      const user = await userRepository.findOneWithAuth(id);
+
+      if (!user) {
+        res.status(404).send({
+          error: "User not found"
+        });
+
+        return;
+      }
+
+      if (!newPassword) {
+        res.status(400).send({
+          error: "New password is required"
+        });
+
+        return;
+      }
+
+      // Hash the new password
+      const hashedPassword = await PasswordUtils.hash(newPassword);
+
+      // Update the auth record with the new password
+      user.auth.password = hashedPassword;
+      await authRepository.save(user.auth);
+
+      /*
+       * TODO: Send notification via notification-service
+       * This is where you would integrate with the notification service
+       * to send password reset confirmation email
+       */
+
+      res.send({
+        message: "Password reset successful"
+      });
+    } catch {
+      res.status(500).send({
+        error: "Internal server error"
+      });
+    }
   };
 }
 

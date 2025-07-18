@@ -164,3 +164,91 @@ export const createPropertyReviewSchema: ValidationChain[] = checkSchema({
   }
 });
 
+export const createPropertyPricingSchema: ValidationChain[] = checkSchema({
+  basePricePerNight: {
+    notEmpty: {
+      errorMessage: "Base price per night is required"
+    },
+    isFloat: {
+      options: { min: 0 },
+      errorMessage: "Base price per night must be a positive number"
+    }
+  },
+  weekendPrice: {
+    optional: true,
+    isFloat: {
+      options: { min: 0 },
+      errorMessage: "Weekend price must be a positive number"
+    }
+  },
+  cleaningFee: {
+    optional: true,
+    isFloat: {
+      options: { min: 0 },
+      errorMessage: "Cleaning fee must be a positive number"
+    }
+  },
+  serviceFeePercent: {
+    optional: true,
+    isFloat: {
+      options: {
+        min: 0,
+        max: 100
+      },
+      errorMessage: "Service fee percent must be between 0 and 100"
+    }
+  },
+  currency: {
+    optional: true,
+    isLength: {
+      options: {
+        min: 3,
+        max: 3
+      },
+      errorMessage: "Currency must be a 3-letter code"
+    },
+    isString: {
+      errorMessage: "Currency must be a string"
+    }
+  }
+});
+
+export const createSeasonalPricingSchema: ValidationChain[] = checkSchema({
+  startDate: {
+    notEmpty: {
+      errorMessage: "Start date is required"
+    },
+    isISO8601: {
+      errorMessage: "Start date must be a valid date"
+    }
+  },
+  endDate: {
+    notEmpty: {
+      errorMessage: "End date is required"
+    },
+    isISO8601: {
+      errorMessage: "End date must be a valid date"
+    },
+    custom: {
+      options: (value, { req }) => {
+        const startDate = new Date(req.body.startDate);
+        const endDate = new Date(value);
+        
+        if (endDate <= startDate) {
+          throw new Error("End date must be after start date");
+        }
+        return true;
+      }
+    }
+  },
+  pricePerNight: {
+    notEmpty: {
+      errorMessage: "Price per night is required"
+    },
+    isFloat: {
+      options: { min: 0 },
+      errorMessage: "Price per night must be a positive number"
+    }
+  }
+});
+

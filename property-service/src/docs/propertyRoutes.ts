@@ -5,6 +5,8 @@
  *     description: Property management endpoints
  *   - name: PropertyReview
  *     description: Property review management endpoints
+ *   - name: PropertyPricing
+ *     description: Property pricing management endpoints
  */
 
 /**
@@ -309,6 +311,210 @@
 
 /**
  * @swagger
+ * /api/v1/property/{id}/pricing:
+ *   post:
+ *     summary: Set pricing for a property
+ *     tags: [PropertyPricing]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Property ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreatePropertyPricing'
+ *     responses:
+ *       201:
+ *         description: Property pricing set successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PropertyPrice'
+ *       400:
+ *         description: Bad request - validation errors
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Property not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/property/{id}/pricing:
+ *   get:
+ *     summary: Get pricing for a property
+ *     tags: [PropertyPricing]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Property ID
+ *     responses:
+ *       200:
+ *         description: Property pricing retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/PropertyPrice'
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Property or pricing not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/property/{id}/pricing/seasonal:
+ *   post:
+ *     summary: Add seasonal pricing for a property
+ *     tags: [PropertyPricing]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Property ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateSeasonalPricing'
+ *     responses:
+ *       201:
+ *         description: Seasonal pricing added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SeasonalPrice'
+ *       400:
+ *         description: Bad request - validation errors
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Property not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/property/{id}/pricing/seasonal:
+ *   get:
+ *     summary: Get seasonal pricing for a property
+ *     tags: [PropertyPricing]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Property ID
+ *     responses:
+ *       200:
+ *         description: Seasonal pricing retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/SeasonalPrice'
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Property not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/property/{id}/pricing/calculate:
+ *   post:
+ *     summary: Calculate total price for a property booking
+ *     tags: [PropertyPricing]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Property ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - checkIn
+ *               - checkOut
+ *             properties:
+ *               checkIn:
+ *                 type: string
+ *                 format: date
+ *                 description: Check-in date (YYYY-MM-DD)
+ *               checkOut:
+ *                 type: string
+ *                 format: date
+ *                 description: Check-out date (YYYY-MM-DD)
+ *     responses:
+ *       200:
+ *         description: Total price calculated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalPrice:
+ *                   type: number
+ *                   format: float
+ *                   description: Total price for the booking
+ *                 breakdown:
+ *                   type: object
+ *                   properties:
+ *                     subtotal:
+ *                       type: number
+ *                       format: float
+ *                       description: Subtotal before fees
+ *                     cleaningFee:
+ *                       type: number
+ *                       format: float
+ *                       description: Cleaning fee
+ *                     serviceFee:
+ *                       type: number
+ *                       format: float
+ *                       description: Service fee
+ *                     currency:
+ *                       type: string
+ *                       description: Currency code
+ *                     nights:
+ *                       type: integer
+ *                       description: Number of nights
+ *       400:
+ *         description: Bad request - validation errors
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Property or pricing not found
+ */
+
+/**
+ * @swagger
  * components:
  *   securitySchemes:
  *     bearerAuth:
@@ -486,4 +692,97 @@
  *         comment:
  *           type: string
  *           minLength: 1
+ *     PropertyPrice:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         propertyId:
+ *           type: string
+ *         basePrice:
+ *           type: number
+ *           format: float
+ *         weekendPrice:
+ *           type: number
+ *           format: float
+ *         cleaningFee:
+ *           type: number
+ *           format: float
+ *         servicePercentage:
+ *           type: number
+ *           format: float
+ *         currency:
+ *           type: string
+ *           enum: [USD, EUR]
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *     CreatePropertyPricing:
+ *       type: object
+ *       required:
+ *         - basePrice
+ *         - currency
+ *       properties:
+ *         basePrice:
+ *           type: number
+ *           format: float
+ *           minimum: 0
+ *         weekendPrice:
+ *           type: number
+ *           format: float
+ *           minimum: 0
+ *         cleaningFee:
+ *           type: number
+ *           format: float
+ *           minimum: 0
+ *         servicePercentage:
+ *           type: number
+ *           format: float
+ *           minimum: 0
+ *           maximum: 100
+ *         currency:
+ *           type: string
+ *           enum: [USD, EUR]
+ *     SeasonalPrice:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         propertyId:
+ *           type: string
+ *         startDate:
+ *           type: string
+ *           format: date
+ *         endDate:
+ *           type: string
+ *           format: date
+ *         pricePerNight:
+ *           type: number
+ *           format: float
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *     CreateSeasonalPricing:
+ *       type: object
+ *       required:
+ *         - startDate
+ *         - endDate
+ *         - pricePerNight
+ *       properties:
+ *         startDate:
+ *           type: string
+ *           format: date
+ *         endDate:
+ *           type: string
+ *           format: date
+ *         pricePerNight:
+ *           type: number
+ *           format: float
+ *           minimum: 0
  */

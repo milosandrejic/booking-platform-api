@@ -2,8 +2,9 @@ import express, { Router } from "express";
 
 import PropertyController from "src/controllers/PropertyController";
 import PropertyReviewController from "src/controllers/PropertyReviewController";
-import { withValidation } from "./middlewares/validation";
-import { withAuth } from "./middlewares/auth";
+import PropertyPricingController from "src/controllers/PropertyPricingController";
+import { withValidation } from "src/middlewares/validation";
+import { withAuth } from "src/middlewares/auth";
 
 const router: Router = express.Router();
 
@@ -12,6 +13,17 @@ router.patch("/property/:id", withAuth, PropertyController.update);
 router.get("/property/:id", withAuth, PropertyController.get);
 router.delete("/property/:id", withAuth, PropertyController.delete);
 router.get("/properties/:ownerId/list", withAuth, PropertyController.listForUser);
+
+// Pricing routes
+router.post("/properties/:propertyId/pricing", withAuth, withValidation, PropertyPricingController.setPricing);
+router.get("/properties/:propertyId/pricing", withAuth, PropertyPricingController.getPricing);
+
+// Seasonal pricing routes
+router.post("/properties/:propertyId/seasonal-pricing", withAuth, withValidation, PropertyPricingController.addSeasonalPricing);
+router.get("/properties/:propertyId/seasonal-pricing", withAuth, PropertyPricingController.getSeasonalPricing);
+
+// Price calculation (for booking service)
+router.get("/properties/:propertyId/calculate-price", PropertyPricingController.calculatePrice);
 
 router.post("/property/review", withAuth, withValidation, PropertyReviewController.create);
 router.patch("/property/review/:id", withAuth, PropertyReviewController.update);

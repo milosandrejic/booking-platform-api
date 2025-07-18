@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import Property from "../model/Property";
-import { propertyRepository } from "../repositories";
+import Property from "src/model/Property";
+import { propertyRepository } from "src/repositories";
 
 class PropertyController {
   static create = async (req: Request, res: Response) => {

@@ -22,10 +22,36 @@
  *     responses:
  *       201:
  *         description: Booking created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               allOf:
+ *                 - $ref: '#/components/schemas/Booking'
+ *                 - type: object
+ *                   properties:
+ *                     priceBreakdown:
+ *                       type: object
+ *                       properties:
+ *                         subtotal:
+ *                           type: number
+ *                           format: float
+ *                         cleaningFee:
+ *                           type: number
+ *                           format: float
+ *                         serviceFee:
+ *                           type: number
+ *                           format: float
+ *                         currency:
+ *                           type: string
+ *                         nights:
+ *                           type: integer
  *       400:
- *         description: Bad request - validation errors
+ *         description: Bad request - validation errors or unable to calculate price
  *       401:
  *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -142,6 +168,7 @@
  *         totalPrice:
  *           type: number
  *           format: float
+ *           description: Total price calculated by the system based on property pricing
  *         status:
  *           type: string
  *           enum: [PENDING, CONFIRMED, CANCELLED]
@@ -157,19 +184,21 @@
  *         - propertyId
  *         - startDate
  *         - endDate
- *         - totalPrice
  *       properties:
  *         propertyId:
  *           type: string
  *           format: uuid
+ *           description: The ID of the property to book
  *         startDate:
  *           type: string
  *           format: date
+ *           description: Check-in date (YYYY-MM-DD)
  *         endDate:
  *           type: string
  *           format: date
- *         totalPrice:
- *           type: number
- *           format: float
- *           minimum: 0
+ *           description: Check-out date (YYYY-MM-DD)
+ *       example:
+ *         propertyId: "123e4567-e89b-12d3-a456-426614174000"
+ *         startDate: "2025-08-01"
+ *         endDate: "2025-08-05"
  */

@@ -5,6 +5,7 @@ import PropertyReviewController from "src/controllers/PropertyReviewController";
 import PropertyPricingController from "src/controllers/PropertyPricingController";
 import { withValidation } from "src/middlewares/validation";
 import { withAuth } from "src/middlewares/auth";
+import { withInternalAuth } from "src/middlewares/internalAuth";
 
 const router: Router = express.Router();
 
@@ -23,7 +24,7 @@ router.post("/properties/:propertyId/seasonal-pricing", withAuth, withValidation
 router.get("/properties/:propertyId/seasonal-pricing", withAuth, PropertyPricingController.getSeasonalPricing);
 
 // Price calculation (for booking service)
-router.get("/properties/:propertyId/calculate-price", PropertyPricingController.calculatePrice);
+router.post("/property/:id/pricing/calculate", withInternalAuth, PropertyPricingController.calculatePrice);
 
 router.post("/property/review", withAuth, withValidation, PropertyReviewController.create);
 router.patch("/property/review/:id", withAuth, PropertyReviewController.update);

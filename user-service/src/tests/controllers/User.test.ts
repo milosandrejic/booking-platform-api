@@ -180,8 +180,17 @@ describe("UserController", () => {
       };
 
       mockRequest.body = updatedData;
+      mockRequest.auth = {
+        id: "auth-123",
+        email: "test@example.com",
+        role: Role.USER,
+        emailVerified: true,
+        password: "hashedPassword",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      } as Auth;
 
-      jest.spyOn(userRepository, "findOneBy").mockResolvedValue(existingUser as User);
+      jest.spyOn(userRepository, "findOneByAuthId").mockResolvedValue(existingUser as User);
       jest.spyOn(userRepository, "save").mockResolvedValue({
         ...existingUser,
         ...updatedData
@@ -199,15 +208,25 @@ describe("UserController", () => {
       });
     });
 
-    it("should return 400 if user not found", async () => {
-      jest.spyOn(userRepository, "findOneBy").mockResolvedValue(null);
+    it("should return 404 if user not found", async () => {
+      mockRequest.auth = {
+        id: "auth-123",
+        email: "test@example.com",
+        role: Role.USER,
+        emailVerified: true,
+        password: "hashedPassword",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      } as Auth;
+
+      jest.spyOn(userRepository, "findOneByAuthId").mockResolvedValue(null);
 
       await userController.update(
         mockRequest as Request,
         mockResponse as unknown as Response
       );
 
-      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.status).toHaveBeenCalledWith(404);
       expect(responseObject).toEqual({
         error: "User not found"
       });

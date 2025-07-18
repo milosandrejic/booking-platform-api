@@ -50,15 +50,6 @@ export const createBookingSchema: ValidationChain[] = checkSchema({
         return true;
       }
     }
-  },
-  totalPrice: {
-    notEmpty: {
-      errorMessage: "Total price is required"
-    },
-    isFloat: {
-      options: { min: 0 },
-      errorMessage: "Total price must be a positive number"
-    }
   }
 });
 

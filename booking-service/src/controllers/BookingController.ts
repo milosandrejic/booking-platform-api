@@ -7,11 +7,13 @@ import {
 import BookingStatus from "src/types/bookingStatus";
 
 import { bookingRepository } from "src/repositories";
+import { propertyServiceAPI } from "src/api";
 
 class BookingController {
   static create = async (req: Request, res: Response) => {
-    const { propertyId, startDate, endDate, totalPrice } = req.body;
+    const { propertyId, startDate, endDate } = req.body;
     const userId = req.user?.id;
+    const authToken = req.headers.authorization?.replace("Bearer ", "");
 
     if (!userId) {
       res.status(401).send({
@@ -21,21 +23,47 @@ class BookingController {
       return;
     }
 
-    let booking = new Booking();
+    if (!authToken) {
+      res.status(401).send({
+        error: "Authorization token required"
+      });
 
-    booking.userId = userId;
-    booking.propertyId = propertyId;
-    booking.startDate = new Date(startDate);
-    booking.endDate = new Date(endDate);
-    booking.totalPrice = totalPrice;
-    booking.status = BookingStatus.PENDING;
+      return;
+    }
 
     try {
+      // Calculate price using the property service
+      const priceCalculation = await propertyServiceAPI.calculatePrice(
+        propertyId,
+        startDate,
+        endDate
+      );
+
+      let booking = new Booking();
+
+      booking.userId = userId;
+      booking.propertyId = propertyId;
+      booking.startDate = new Date(startDate);
+      booking.endDate = new Date(endDate);
+      booking.totalPrice = priceCalculation.totalPrice;
+      booking.status = BookingStatus.PENDING;
+
       booking = await bookingRepository.save(booking);
 
-      res.status(201).send(booking);
-    } catch {
-      res.sendStatus(400);
+      res.status(201).send({
+        ...booking,
+        priceBreakdown: priceCalculation.breakdown
+      });
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("Property service error")) {
+        res.status(400).send({
+          error: "Unable to calculate price for this property"
+        });
+      } else {
+        res.status(500).send({
+          error: "Internal server error"
+        });
+      }
     }
   };
 

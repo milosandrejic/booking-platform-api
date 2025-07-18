@@ -8,6 +8,10 @@ declare global {
         email: string;
         role: string;
       };
+      internalService?: {
+        serviceId: string;
+        serviceName: string;
+      };
     }
   }
 }

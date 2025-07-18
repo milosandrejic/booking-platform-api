@@ -123,11 +123,11 @@ class PropertyPricingController {
   };
 
   static calculatePrice = async (req: Request, res: Response) => {
-    const { propertyId } = req.params;
-    const { startDate, endDate } = req.query;
+    const { id: propertyId } = req.params;
+    const { checkIn, checkOut } = req.body;
 
-    if (!startDate || !endDate) {
-      res.status(400).json({ error: "startDate and endDate are required" });
+    if (!checkIn || !checkOut) {
+      res.status(400).json({ error: "checkIn and checkOut are required" });
       return;
     }
 
@@ -144,15 +144,15 @@ class PropertyPricingController {
       });
 
       const calculation = PropertyPricingController.calculateTotalPrice(
-        new Date(startDate as string),
-        new Date(endDate as string),
+        new Date(checkIn),
+        new Date(checkOut),
         pricing,
         seasonalPrices
       );
 
       res.json(calculation);
     } catch {
-      res.status(400).json({ error: "Failed to calculate price" });
+      res.status(500).json({ error: "Failed to calculate price" });
     }
   };
 

@@ -13,6 +13,7 @@ class UserController {
   static create = async (req: Request, res: Response) => {
     const {
       email,
+      password,
       firstName,
       lastName,
       displayName,
@@ -24,7 +25,10 @@ class UserController {
 
     const auth = new Auth();
 
+    const hashedPassword = await PasswordUtils.hash(password);
+
     auth.email = email;
+    auth.password = hashedPassword;
     auth.role = Role.USER;
 
     let user = new User();
@@ -53,25 +57,31 @@ class UserController {
   };
 
   static update = async (req: Request, res: Response) => {
-    let user = await userRepository.findOneBy({ id: req.params.id });
+    try {
+      let user = await userRepository.findOneByAuthId(req.auth.id);
 
-    if (!user) {
-      res.status(400).send({
-        error: "User not found"
+      if (!user) {
+        res.status(404).send({
+          error: "User not found"
+        });
+
+        return;
+      }
+
+      user = {
+        ...user,
+        ...req.body,
+        id: user.id
+      } as User;
+
+      user = await userRepository.save(user);
+
+      res.send(user);
+    } catch {
+      res.status(500).send({
+        error: "Internal server error"
       });
-
-      return;
     }
-
-    user = {
-      ...user,
-      ...req.body,
-      id: user.id
-    } as User;
-
-    user = await userRepository.save(user);
-
-    res.send(user);
   };
 
   static get = async (req: Request, res: Response) => {

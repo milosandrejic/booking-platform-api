@@ -11,7 +11,7 @@ export const internalRouter: Router = express.Router();
 
 router.post("/login", withValidation, AuthController.login);
 router.post("/user", withValidation, UserController.create);
-router.patch("/user/:id", withAuth, withValidation, UserController.update);
+router.patch("/me", withAuth, withValidation, UserController.update);
 router.get("/user/:id", withAuth, UserController.get);
 router.get("/me", withAuth, UserController.me);
 router.post("/user/:id/reset-password", withAuth, withValidation, UserController.resetPassword);

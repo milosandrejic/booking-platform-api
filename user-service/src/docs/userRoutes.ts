@@ -62,19 +62,12 @@
 
 /**
  * @swagger
- * /api/v1/user/{id}:
+ * /api/v1/me:
  *   patch:
- *     summary: Update user
+ *     summary: Update current user profile
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: User ID
  *     requestBody:
  *       required: true
  *       content:

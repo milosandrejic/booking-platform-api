@@ -13,6 +13,20 @@ export const createProfileSchema: ValidationChain[] = checkSchema({
       errorMessage: "Email is in wrong format"
     }
   },
+  password: {
+    notEmpty: {
+      errorMessage: "Password is required"
+    },
+    isLength: {
+      errorMessage: "Password must be at least 8 characters long",
+      options: {
+        min: 8
+      }
+    },
+    isString: {
+      errorMessage: "Password should be text"
+    }
+  },
   firstName: {
     notEmpty: {
       errorMessage: "First name is required"
@@ -121,6 +135,25 @@ export const updateProfileSchema: ValidationChain[] = checkSchema({
     isIn: {
       options: [Gender.MALE, Gender.FEMALE],
       errorMessage: "Gender must be male or female"
+    }
+  }
+});
+
+export const loginSchema: ValidationChain[] = checkSchema({
+  email: {
+    notEmpty: {
+      errorMessage: "Email is required"
+    },
+    isEmail: {
+      errorMessage: "Email is in wrong format"
+    }
+  },
+  password: {
+    notEmpty: {
+      errorMessage: "Password is required"
+    },
+    isString: {
+      errorMessage: "Password should be text"
     }
   }
 });

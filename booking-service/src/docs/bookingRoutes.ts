@@ -41,12 +41,14 @@
  *         name: userId
  *         schema:
  *           type: string
- *         description: Filter by user ID
+ *           format: uuid
+ *         description: Filter by user ID (must be valid UUID)
  *       - in: query
  *         name: propertyId
  *         schema:
  *           type: string
- *         description: Filter by property ID
+ *           format: uuid
+ *         description: Filter by property ID (must be valid UUID)
  *     responses:
  *       200:
  *         description: Bookings retrieved successfully
@@ -70,7 +72,8 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Booking ID
+ *           format: uuid
+ *         description: Booking ID (must be valid UUID)
  *     responses:
  *       200:
  *         description: Booking found
@@ -96,7 +99,8 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Booking ID
+ *           format: uuid
+ *         description: Booking ID (must be valid UUID)
  *     responses:
  *       200:
  *         description: Booking cancelled successfully
@@ -122,10 +126,13 @@
  *       properties:
  *         id:
  *           type: string
+ *           format: uuid
  *         userId:
  *           type: string
+ *           format: uuid
  *         propertyId:
  *           type: string
+ *           format: uuid
  *         startDate:
  *           type: string
  *           format: date
@@ -154,6 +161,7 @@
  *       properties:
  *         propertyId:
  *           type: string
+ *           format: uuid
  *         startDate:
  *           type: string
  *           format: date

@@ -6,6 +6,14 @@ import {
 import PropertyType from "src/types/propertyType";
 
 export const createPropertySchema: ValidationChain[] = checkSchema({
+  ownerId: {
+    notEmpty: {
+      errorMessage: "Owner ID is required"
+    },
+    isUUID: {
+      errorMessage: "Owner ID must be a valid UUID"
+    }
+  },
   title: {
     notEmpty: {
       errorMessage: "Title is required"
@@ -141,7 +149,7 @@ export const createPropertyReviewSchema: ValidationChain[] = checkSchema({
     isInt: {
       options: {
         min: 1,
-        max: 10
+        max: 5
       },
       errorMessage: "Rating must be an integer between 1 and 5"
     }

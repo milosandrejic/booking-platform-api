@@ -3,11 +3,13 @@ import { ValidationChain } from "express-validator";
 import {
   createProfileSchema,
   updateProfileSchema,
-  resetPasswordSchema
+  resetPasswordSchema,
+  loginSchema
 } from "src/validations/schema";
 
 export class ValidationFactory {
   private static readonly schemas: Record<string, ValidationChain[]> = {
+    "/login": loginSchema,
     "/user": createProfileSchema,
     "/user/:id": updateProfileSchema,
     "/user/:id/reset-password": resetPasswordSchema

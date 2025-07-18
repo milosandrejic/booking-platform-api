@@ -19,6 +19,9 @@
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - email
+ *               - password
  *             properties:
  *               email:
  *                 type: string
@@ -202,6 +205,7 @@
  *       properties:
  *         id:
  *           type: string
+ *           format: uuid
  *         email:
  *           type: string
  *           format: email

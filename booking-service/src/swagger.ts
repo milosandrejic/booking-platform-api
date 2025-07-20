@@ -12,8 +12,12 @@ const options = {
     },
     servers: [
       {
+        url: "http://localhost:9000/api/v1/booking",
+        description: "API Gateway server"
+      },
+      {
         url: `http://localhost:${port}`,
-        description: "Local server"
+        description: "Direct service server"
       }
     ]
   },

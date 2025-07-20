@@ -13,10 +13,16 @@ const app: Express = express();
 app.use(express.json());
 
 app.use("/api/v1", router);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+if (process.env.NODE_ENV !== "production") {
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
 
 const port = process.env.PORT;
 
 app.listen(port, () => {
-  console.log(`Server is listening on port: ${port}`);
+  console.log(`Property Service is listening on port: ${port}`);
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`Swagger docs available at http://localhost:${port}/docs`);
+  }
 });

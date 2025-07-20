@@ -42,7 +42,7 @@ services:
       - booking-network
   
   user_service:
-    container_name: users_service
+    container_name: user_service
     build: 
       context: ./user-service
       dockerfile: ./Dockerfile

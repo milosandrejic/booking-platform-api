@@ -10,7 +10,7 @@ import { userRepository, authRepository } from "src/repositories";
 import { PasswordUtils } from "src/utils/passwordUtils";
 
 class UserController {
-  static create = async (req: Request, res: Response) => {
+  static createCustomer = async (req: Request, res: Response) => {
     const {
       email,
       password,
@@ -30,6 +30,52 @@ class UserController {
     auth.email = email;
     auth.password = hashedPassword;
     auth.role = Role.USER;
+
+    let user = new User();
+
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.phoneNumber = phoneNumber;
+    user.dateOfBirth = dateOfBirth;
+    user.nationality = nationality;
+    user.gender = gender;
+    user.auth = auth;
+
+    if (displayName) {
+      user.displayName = displayName;
+    } else {
+      user.displayName = `${user.firstName} ${user.lastName}`;
+    }
+
+    try {
+      user = await userRepository.save(user);
+
+      res.send(user);
+    } catch {
+      res.sendStatus(400);
+    }
+  };
+
+  static createOwner = async (req: Request, res: Response) => {
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      displayName,
+      phoneNumber,
+      dateOfBirth,
+      nationality,
+      gender
+    } = req.body;
+
+    const auth = new Auth();
+
+    const hashedPassword = await PasswordUtils.hash(password);
+
+    auth.email = email;
+    auth.password = hashedPassword;
+    auth.role = Role.OWNER;
 
     let user = new User();
 

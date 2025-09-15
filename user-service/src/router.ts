@@ -10,7 +10,8 @@ export const router: Router = express.Router();
 export const internalRouter: Router = express.Router();
 
 router.post("/login", withValidation, AuthController.login);
-router.post("/user", withValidation, UserController.create);
+router.post("/customer", withValidation, UserController.createCustomer);
+router.post("/owner", withValidation, UserController.createOwner);
 router.patch("/me", withAuth, withValidation, UserController.update);
 router.get("/user/:id", withAuth, UserController.get);
 router.get("/me", withAuth, UserController.me);

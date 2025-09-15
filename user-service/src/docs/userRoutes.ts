@@ -37,9 +37,9 @@
 
 /**
  * @swagger
- * /api/v1/user:
+ * /api/v1/customer:
  *   post:
- *     summary: Create a new user
+ *     summary: Create a new customer user
  *     tags: [User]
  *     requestBody:
  *       required: true
@@ -49,7 +49,32 @@
  *             $ref: '#/components/schemas/CreateUser'
  *     responses:
  *       201:
- *         description: User created successfully
+ *         description: Customer user created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request - validation errors
+ *       409:
+ *         description: User already exists
+ */
+
+/**
+ * @swagger
+ * /api/v1/owner:
+ *   post:
+ *     summary: Create a new owner user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateUser'
+ *     responses:
+ *       201:
+ *         description: Owner user created successfully
  *         content:
  *           application/json:
  *             schema:

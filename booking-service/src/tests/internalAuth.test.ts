@@ -1,8 +1,14 @@
 import jwt from "jsonwebtoken";
+
+// Set required environment variables before importing the module
+process.env.INTERNAL_SERVICE_SECRET = "test-internal-secret-key";
+process.env.SERVICE_ID = "booking-service";
+process.env.SERVICE_NAME = "Booking Service";
+
 import { generateInternalServiceToken } from "../utils/internalAuth";
 
 describe("Internal Service Authentication", () => {
-  const INTERNAL_SERVICE_SECRET = process.env.INTERNAL_SERVICE_SECRET || "internal-service-secret-key";
+  const INTERNAL_SERVICE_SECRET = process.env.INTERNAL_SERVICE_SECRET!;
 
   it("should generate valid internal service token", () => {
     const token = generateInternalServiceToken();

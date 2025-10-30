@@ -24,14 +24,13 @@ class UserServiceAPI {
     this.client = createAPIClient(USER_SERVICE_URL);
   }
 
-  async getUserProfile(userId: string, authToken?: string): Promise<UserProfile> {
+  async getUserProfile(userId: string): Promise<UserProfile> {
     try {
       const response = await this.client.get(
-        `/api/v1/user/${userId}`,
+        `/api/internal/user/${userId}`,
         {
           headers: {
-            "x-internal-service-token": getCachedInternalServiceToken(),
-            ...(authToken && { "Authorization": `Bearer ${authToken}` })
+            "x-internal-service-token": getCachedInternalServiceToken()
           }
         }
       );

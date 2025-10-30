@@ -7,7 +7,7 @@ import swaggerSpec from "src/swagger";
 import {
   router,
   internalRouter
-} from "router";
+} from "src/router";
 
 dataSource.initialize();
 

@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-const INTERNAL_SERVICE_SECRET = process.env.INTERNAL_SERVICE_SECRET || "internal-service-secret-key";
+const INTERNAL_SERVICE_SECRET = process.env.INTERNAL_SERVICE_SECRET;
+
+if (!INTERNAL_SERVICE_SECRET) {
+  throw new Error("INTERNAL_SERVICE_SECRET environment variable is required");
+}
 
 const ALLOWED_SERVICES = [
   {
@@ -32,52 +36,33 @@ const validateServiceIdentity = (serviceId: string, serviceName: string): boolea
 };
 
 export const withInternalAuth = (req: Request, res: Response, next: NextFunction): void => {
-  const authHeader = req.headers.authorization;
   const internalToken = req.headers["x-internal-service-token"] as string;
 
-  if (internalToken) {
-    try {
-      const decoded = jwt.verify(internalToken, INTERNAL_SERVICE_SECRET) as InternalServicePayload;
-
-      if (!validateServiceIdentity(decoded.serviceId, decoded.serviceName)) {
-        res.status(403).json({
-          error: "Invalid service identity or service not whitelisted",
-          serviceId: decoded.serviceId,
-          serviceName: decoded.serviceName
-        });
-        return;
-      }
-
-      req.internalService = {
-        serviceId: decoded.serviceId,
-        serviceName: decoded.serviceName
-      };
-
-      next();
-      return;
-    } catch {
-      res.status(401).json({ error: "Invalid internal service token" });
-      return;
-    }
-  }
-
-  if (!authHeader) {
-    res.status(401).json({ error: "Authorization header is required" });
+  if (!internalToken) {
+    res.status(401).json({ error: "Internal service token required" });
     return;
   }
 
-  const token = authHeader.replace("Bearer ", "");
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "fallback_secret") as {
-      id: string;
-      email: string;
-      role: string;
+    const decoded = jwt.verify(internalToken, INTERNAL_SERVICE_SECRET) as InternalServicePayload;
+
+    if (!validateServiceIdentity(decoded.serviceId, decoded.serviceName)) {
+      res.status(403).json({
+        error: "Invalid service identity or service not whitelisted",
+        serviceId: decoded.serviceId,
+        serviceName: decoded.serviceName
+      });
+      return;
+    }
+
+    req.internalService = {
+      serviceId: decoded.serviceId,
+      serviceName: decoded.serviceName
     };
-    req.auth = decoded;
+
     next();
   } catch {
-    res.status(401).json({ error: "Invalid token" });
+    res.status(401).json({ error: "Invalid internal service token" });
   }
 };
 

@@ -8,7 +8,9 @@ import { withAuth } from "src/middlewares/auth";
 import { withInternalAuth } from "src/middlewares/internalAuth";
 
 const router: Router = express.Router();
+const internalRouter: Router = express.Router();
 
+// Public routes
 router.post("/property", withAuth, withValidation, PropertyController.create);
 router.patch("/property/:id", withAuth, PropertyController.update);
 router.get("/property/:id", withAuth, PropertyController.get);
@@ -23,9 +25,11 @@ router.get("/properties/:propertyId/pricing", withAuth, PropertyPricingControlle
 router.post("/properties/:propertyId/seasonal-pricing", withAuth, withValidation, PropertyPricingController.addSeasonalPricing);
 router.get("/properties/:propertyId/seasonal-pricing", withAuth, PropertyPricingController.getSeasonalPricing);
 
-// Price calculation (for booking service)
-router.post("/property/:id/pricing/calculate", withInternalAuth, PropertyPricingController.calculatePrice);
+// Internal-only routes (service-to-service communication)
+internalRouter.post("/property/:id/pricing/calculate", withInternalAuth, PropertyPricingController.calculatePrice);
+internalRouter.get("/property/:id", withInternalAuth, PropertyController.get);
 
+// Review routes
 router.post("/property/review", withAuth, withValidation, PropertyReviewController.create);
 router.patch("/property/review/:id", withAuth, PropertyReviewController.update);
 router.get("/property/review/:id", withAuth, PropertyReviewController.get);
@@ -33,3 +37,4 @@ router.delete("/property/review/:id", withAuth, PropertyReviewController.delete)
 router.get("/property/review/:propertyId/list", withAuth, PropertyReviewController.listForProperty);
 
 export default router;
+export { internalRouter };

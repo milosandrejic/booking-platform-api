@@ -1,7 +1,8 @@
 import { describe, expect, it, jest } from "@jest/globals";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { withAuth, withInternalAuth } from "src/middlewares/auth";
+import { withAuth } from "src/middlewares/auth";
+import { withInternalAuth } from "src/middlewares/internalAuth";
 import { Auth } from "src/model";
 import { authRepository } from "src/repositories";
 
@@ -17,7 +18,8 @@ describe("Auth Middleware", () => {
     mockRequest = {};
     mockResponse = {
       status: jest.fn().mockReturnThis() as unknown as Response["status"],
-      send: jest.fn() as unknown as Response["send"]
+      send: jest.fn() as unknown as Response["send"],
+      json: jest.fn() as unknown as Response["json"]
     };
     nextFunction = jest.fn();
     jest.clearAllMocks();
@@ -148,47 +150,19 @@ describe("Auth Middleware", () => {
       jest.clearAllMocks();
     });
 
-    it("should return 401 if no x-authorization header", async () => {
-      mockRequest.headers = {
-        "x-service-name": "serviceA"
-      };
+    it("should return 401 if no x-internal-service-token header", async () => {
+      mockRequest.headers = {};
 
       await withInternalAuth(mockRequest as Request, mockResponse as Response, nextFunction);
 
       expect(mockResponse.status).toHaveBeenCalledWith(401);
-      expect(mockResponse.send).toHaveBeenCalledWith({ error: "Unauthorized." });
+      expect(mockResponse.json).toHaveBeenCalledWith({ error: "Internal service token required" });
       expect(nextFunction).not.toHaveBeenCalled();
     });
 
-    it("should return 401 if x-authorization header does not start with 'Bearer '", async () => {
+    it("should return 401 if token is invalid", async () => {
       mockRequest.headers = {
-        "x-authorization": "Token sometoken",
-        "x-service-name": "serviceA"
-      };
-
-      await withInternalAuth(mockRequest as Request, mockResponse as Response, nextFunction);
-
-      expect(mockResponse.status).toHaveBeenCalledWith(401);
-      expect(mockResponse.send).toHaveBeenCalledWith({ error: "Unauthorized." });
-      expect(nextFunction).not.toHaveBeenCalled();
-    });
-
-    it("should return 401 if no x-service-name header", async () => {
-      mockRequest.headers = {
-        "x-authorization": "Bearer sometoken"
-      };
-
-      await withInternalAuth(mockRequest as Request, mockResponse as Response, nextFunction);
-
-      expect(mockResponse.status).toHaveBeenCalledWith(401);
-      expect(mockResponse.send).toHaveBeenCalledWith({ error: "Unauthorized." });
-      expect(nextFunction).not.toHaveBeenCalled();
-    });
-
-    it("should return 401 if token is invalid (throws)", async () => {
-      mockRequest.headers = {
-        "x-authorization": "Bearer invalid-token",
-        "x-service-name": "serviceA"
+        "x-internal-service-token": "invalid-token"
       };
       (jwt.verify as jest.Mock).mockImplementation(() => {
         throw new Error("Invalid token");
@@ -197,36 +171,67 @@ describe("Auth Middleware", () => {
       await withInternalAuth(mockRequest as Request, mockResponse as Response, nextFunction);
 
       expect(mockResponse.status).toHaveBeenCalledWith(401);
-      expect(mockResponse.send).toHaveBeenCalledWith({ error: "Unauthorized." });
+      expect(mockResponse.json).toHaveBeenCalledWith({ error: "Invalid internal service token" });
       expect(nextFunction).not.toHaveBeenCalled();
     });
 
-    it("should return 401 if decoded token service does not match x-service-name", async () => {
+    it("should return 403 if service is not whitelisted", async () => {
       mockRequest.headers = {
-        "x-authorization": "Bearer valid-token",
-        "x-service-name": "serviceA"
+        "x-internal-service-token": "valid-token"
       };
-      (jwt.verify as jest.Mock).mockReturnValue({ service: "otherService" });
+      (jwt.verify as jest.Mock).mockReturnValue({
+        serviceId: "unknown-service",
+        serviceName: "Unknown Service"
+      });
 
       await withInternalAuth(mockRequest as Request, mockResponse as Response, nextFunction);
 
-      expect(mockResponse.status).toHaveBeenCalledWith(401);
-      expect(mockResponse.send).toHaveBeenCalledWith({ error: "Unauthorized." });
+      expect(mockResponse.status).toHaveBeenCalledWith(403);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        error: "Invalid service identity or service not whitelisted",
+        serviceId: "unknown-service",
+        serviceName: "Unknown Service"
+      });
       expect(nextFunction).not.toHaveBeenCalled();
     });
 
-    it("should call next if token and service are valid", async () => {
+    it("should return 403 if serviceId and serviceName don't match", async () => {
       mockRequest.headers = {
-        "x-authorization": "Bearer valid-token",
-        "x-service-name": "serviceA"
+        "x-internal-service-token": "valid-token"
       };
-      (jwt.verify as jest.Mock).mockReturnValue({ service: "serviceA" });
+      (jwt.verify as jest.Mock).mockReturnValue({
+        serviceId: "booking-service",
+        serviceName: "Wrong Service Name"
+      });
+
+      await withInternalAuth(mockRequest as Request, mockResponse as Response, nextFunction);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(403);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        error: "Invalid service identity or service not whitelisted",
+        serviceId: "booking-service",
+        serviceName: "Wrong Service Name"
+      });
+      expect(nextFunction).not.toHaveBeenCalled();
+    });
+
+    it("should call next if token and service identity are valid", async () => {
+      mockRequest.headers = {
+        "x-internal-service-token": "valid-token"
+      };
+      (jwt.verify as jest.Mock).mockReturnValue({
+        serviceId: "booking-service",
+        serviceName: "Booking Service"
+      });
 
       await withInternalAuth(mockRequest as Request, mockResponse as Response, nextFunction);
 
       expect(nextFunction).toHaveBeenCalled();
+      expect(mockRequest.internalService).toEqual({
+        serviceId: "booking-service",
+        serviceName: "Booking Service"
+      });
       expect(mockResponse.status).not.toHaveBeenCalled();
-      expect(mockResponse.send).not.toHaveBeenCalled();
     });
   });
 });

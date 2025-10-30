@@ -29,20 +29,18 @@ class PropertyServiceAPI {
   async calculatePrice(
     propertyId: string,
     checkIn: string,
-    checkOut: string,
-    authToken?: string
+    checkOut: string
   ): Promise<PriceCalculationResponse> {
     try {
       const response = await this.client.post(
-        `/api/v1/property/${propertyId}/pricing/calculate`,
+        `/api/internal/property/${propertyId}/pricing/calculate`,
         {
           checkIn,
           checkOut
         } as PriceCalculationRequest,
         {
           headers: {
-            "x-internal-service-token": getCachedInternalServiceToken(),
-            ...(authToken && { "Authorization": `Bearer ${authToken}` })
+            "x-internal-service-token": getCachedInternalServiceToken()
           }
         }
       );
@@ -59,14 +57,13 @@ class PropertyServiceAPI {
     }
   }
 
-  async getProperty(propertyId: string, authToken?: string): Promise<any> {
+  async getProperty(propertyId: string): Promise<any> {
     try {
       const response = await this.client.get(
-        `/api/v1/property/${propertyId}`,
+        `/api/internal/property/${propertyId}`,
         {
           headers: {
-            "x-internal-service-token": getCachedInternalServiceToken(),
-            ...(authToken && { "Authorization": `Bearer ${authToken}` })
+            "x-internal-service-token": getCachedInternalServiceToken()
           }
         }
       );

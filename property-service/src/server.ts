@@ -3,7 +3,7 @@ import "dotenv/config";
 import { dataSource } from "src/db/config";
 import swaggerUi from "swagger-ui-express";
 
-import router from "router";
+import router, { internalRouter } from "src/router";
 import swaggerSpec from "src/swagger";
 
 dataSource.initialize();
@@ -13,6 +13,7 @@ const app: Express = express();
 app.use(express.json());
 
 app.use("/api/v1", router);
+app.use("/api/internal", internalRouter);
 
 if (process.env.NODE_ENV !== "production") {
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

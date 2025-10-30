@@ -1,8 +1,12 @@
 import jwt from "jsonwebtoken";
 
-const INTERNAL_SERVICE_SECRET = process.env.INTERNAL_SERVICE_SECRET || "internal-service-secret-key";
+const INTERNAL_SERVICE_SECRET = process.env.INTERNAL_SERVICE_SECRET;
 const SERVICE_ID = process.env.SERVICE_ID || "booking-service";
 const SERVICE_NAME = process.env.SERVICE_NAME || "Booking Service";
+
+if (!INTERNAL_SERVICE_SECRET) {
+  throw new Error("INTERNAL_SERVICE_SECRET environment variable is required");
+}
 
 let cachedToken: string | null = null;
 let tokenExpiry: number = 0;

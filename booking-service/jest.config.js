@@ -1,3 +1,4 @@
+/* eslint-disable */
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
@@ -10,7 +11,7 @@ module.exports = {
     'src/**/*.ts',
     '!src/**/*.d.ts',
   ],
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/src/$1',
   },
 };

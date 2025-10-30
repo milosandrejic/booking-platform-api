@@ -4,7 +4,6 @@ import { userRepository, authRepository } from "src/repositories";
 import userController from "src/controllers/User";
 import { describe, expect, jest, beforeEach, it } from "@jest/globals";
 import { User, Auth } from "src/model";
-import { PasswordUtils } from "src/utils/passwordUtils";
 
 jest.mock("src/repositories", () => ({
   userRepository: {
@@ -18,11 +17,10 @@ jest.mock("src/repositories", () => ({
   }
 }));
 
-jest.mock("src/utils/passwordUtils", () => ({
-  PasswordUtils: {
-    hash: jest.fn()
-  }
-}));
+jest.mock("src/utils/passwordUtils");
+
+// Import after mock
+import { PasswordUtils } from "src/utils/passwordUtils";
 
 type MockResponse = {
   status: jest.Mock;
@@ -64,8 +62,16 @@ describe("UserController", () => {
     jest.clearAllMocks();
   });
 
-  describe("create", () => {
-    it("should create a new user with display name", async () => {
+  describe("createCustomer", () => {
+    beforeEach(() => {
+      mockRequest.body = {
+        ...mockRequest.body,
+        email: "test@example.com",
+        password: "password123"
+      };
+    });
+
+    it("should create a new customer with display name", async () => {
       const mockAuth = {
         id: "1",
         email: "test@example.com",
@@ -88,18 +94,20 @@ describe("UserController", () => {
         auth: mockAuth
       } as Partial<User>;
 
+      (PasswordUtils.hash as any).mockResolvedValue("hashed_password");
       jest.spyOn(userRepository, "save").mockResolvedValue(mockUser as User);
 
-      await userController.create(
+      await userController.createCustomer(
         mockRequest as Request,
         mockResponse as unknown as Response
       );
 
+      expect(PasswordUtils.hash).toHaveBeenCalledWith("password123");
       expect(userRepository.save).toHaveBeenCalled();
       expect(responseObject).toEqual(mockUser);
     });
 
-    it("should create a new user with custom display name", async () => {
+    it("should create a new customer with custom display name", async () => {
       mockRequest.body = {
         ...mockRequest.body,
         displayName: "Custom Name"
@@ -127,9 +135,10 @@ describe("UserController", () => {
         auth: mockAuth
       } as Partial<User>;
 
+      (PasswordUtils.hash as any).mockResolvedValue("hashed_password");
       jest.spyOn(userRepository, "save").mockResolvedValue(mockUser as User);
 
-      await userController.create(
+      await userController.createCustomer(
         mockRequest as Request,
         mockResponse as unknown as Response
       );
@@ -139,9 +148,68 @@ describe("UserController", () => {
     });
 
     it("should return 400 on error", async () => {
+      (PasswordUtils.hash as any).mockResolvedValue("hashed_password");
       jest.spyOn(userRepository, "save").mockRejectedValue(new Error("Database error"));
 
-      await userController.create(
+      await userController.createCustomer(
+        mockRequest as Request,
+        mockResponse as unknown as Response
+      );
+
+      expect(mockResponse.sendStatus).toHaveBeenCalledWith(400);
+    });
+  });
+
+  describe("createOwner", () => {
+    beforeEach(() => {
+      mockRequest.body = {
+        ...mockRequest.body,
+        email: "owner@example.com",
+        password: "ownerpass123"
+      };
+    });
+
+    it("should create a new owner with role OWNER", async () => {
+      const mockAuth = {
+        id: "2",
+        email: "owner@example.com",
+        emailVerified: false,
+        password: "hashed_password",
+        role: Role.OWNER,
+        createdAt: new Date(),
+        user: undefined
+      } as Partial<Auth>;
+
+      const mockUser = {
+        id: "124",
+        firstName: "John",
+        lastName: "Doe",
+        displayName: "John Doe",
+        phoneNumber: "+1234567890",
+        dateOfBirth: new Date("1990-01-01"),
+        nationality: "US",
+        gender: Gender.MALE,
+        auth: mockAuth
+      } as Partial<User>;
+
+      (PasswordUtils.hash as any).mockResolvedValue("hashed_password");
+      jest.spyOn(userRepository, "save").mockResolvedValue(mockUser as User);
+
+      await userController.createOwner(
+        mockRequest as Request,
+        mockResponse as unknown as Response
+      );
+
+      expect(PasswordUtils.hash).toHaveBeenCalledWith("ownerpass123");
+      expect(userRepository.save).toHaveBeenCalled();
+      expect(responseObject).toEqual(mockUser);
+    });
+
+    it("should return 400 on error", async () => {
+      (PasswordUtils.hash as any).mockResolvedValue("hashed_password");
+      jest.spyOn(userRepository, "save").mockRejectedValue(new Error("Database error"));
+
+      await userController.createOwner(
         mockRequest as Request,
         mockResponse as unknown as Response
       );
@@ -387,7 +455,7 @@ describe("UserController", () => {
       };
 
       jest.spyOn(userRepository, "findOneWithAuth").mockResolvedValue(mockUser as any);
-      jest.spyOn(PasswordUtils, "hash").mockResolvedValue("newHashedPassword");
+      (PasswordUtils.hash as any).mockResolvedValue("newHashedPassword");
       jest.spyOn(authRepository, "save").mockResolvedValue(mockUser.auth as any);
 
       await userController.resetPassword(

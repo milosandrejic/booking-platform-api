@@ -73,6 +73,20 @@ services:
     networks:
       - booking-network
 
+  location_service:
+    container_name: location_service
+    build:
+      context: ./location-service
+      dockerfile: ./Dockerfile
+    ports:
+      - 9004:9004
+    volumes:
+      - ./location-service/src:/app/src
+      - ./location-service/tsconfig.json:/app/tsconfig.json
+      - ./location-service/.env:/app/.env
+    networks:
+      - booking-network
+
   booking_service:
     container_name: booking_service
     build:
@@ -104,6 +118,7 @@ services:
       - user_service
       - property_service
       - booking_service
+      - location_service
 
 volumes:
   users_storage:

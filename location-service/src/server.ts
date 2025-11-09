@@ -1,19 +1,15 @@
-import "reflect-metadata";
 import express, { Express } from "express";
 import "dotenv/config";
 import cors from "cors";
-import { dataSource } from "src/db/config";
 import swaggerUi from "swagger-ui-express";
-import swaggerSpec from "src/swagger";
 import router from "src/router";
-
-dataSource.initialize();
+import swaggerSpec from "src/swagger";
 
 const app: Express = express();
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: "*", // Allow all origins in development (restrict in production)
+  origin: "*",
   methods: [
     "GET",
     "POST",
@@ -21,7 +17,7 @@ app.use(cors({
     "PATCH",
     "DELETE"
   ],
-  allowedHeaders: ["Content-Type", "Authorization", "x-internal-service-token"]
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(express.json());
@@ -32,10 +28,10 @@ if (process.env.NODE_ENV !== "production") {
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 }
 
-const port = process.env.PORT;
+const port = process.env.PORT || 9004;
 
 app.listen(port, () => {
-  console.log(`Booking Service is listening on port: ${port}`);
+  console.log(`Location Service is listening on port: ${port}`);
   if (process.env.NODE_ENV !== "production") {
     console.log(`Swagger docs available at http://localhost:${port}/docs`);
   }

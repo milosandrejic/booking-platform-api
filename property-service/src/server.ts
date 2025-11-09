@@ -1,5 +1,6 @@
 import express, { Express } from "express";
 import "dotenv/config";
+import cors from "cors";
 import { dataSource } from "src/db/config";
 import swaggerUi from "swagger-ui-express";
 
@@ -9,6 +10,19 @@ import swaggerSpec from "src/swagger";
 dataSource.initialize();
 
 const app: Express = express();
+
+// Enable CORS for all routes
+app.use(cors({
+  origin: "*", // Allow all origins in development (restrict in production)
+  methods: [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE"
+  ],
+  allowedHeaders: ["Content-Type", "Authorization", "x-internal-service-token"]
+}));
 
 app.use(express.json());
 

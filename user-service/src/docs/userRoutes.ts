@@ -31,8 +31,135 @@
  *     responses:
  *       200:
  *         description: Successful login
+ *         headers:
+ *           Set-Cookie:
+ *             description: Refresh token in httpOnly sameSite strict cookie
+ *             schema:
+ *               type: string
+ *               example: refreshToken=eyJhbGc...; Path=/api/v1; HttpOnly; Secure; SameSite=Strict; Max-Age=604800
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                   description: JWT access token (15 minute expiry)
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *                 refreshToken:
+ *                   type: string
+ *                   description: Refresh token (7 day expiry)
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *       400:
  *         description: Invalid credentials
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Wrong email or password
+ */
+
+/**
+ * @swagger
+ * /api/v1/refresh:
+ *   post:
+ *     summary: Refresh access token
+ *     description: Generate a new access token using a valid refresh token from httpOnly cookie or request body
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: Refresh token (fallback if cookie not present)
+ *                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *     responses:
+ *       200:
+ *         description: New tokens generated successfully with strict rotation
+ *         headers:
+ *           Set-Cookie:
+ *             description: New refresh token in httpOnly cookie (old token invalidated)
+ *             schema:
+ *               type: string
+ *               example: refreshToken=eyJhbGc...; Path=/api/v1; HttpOnly; Secure; SameSite=Strict; Max-Age=604800
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                   description: New JWT access token (15 minute expiry)
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *                 refreshToken:
+ *                   type: string
+ *                   description: New refresh token (7 day expiry)
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       401:
+ *         description: Invalid or expired refresh token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Invalid or expired refresh token
+ */
+
+/**
+ * @swagger
+ * /api/v1/logout:
+ *   post:
+ *     summary: Logout user
+ *     description: Invalidate all refresh tokens by incrementing token version and clear refresh token cookie
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logged out successfully
+ *         headers:
+ *           Set-Cookie:
+ *             description: Cleared refresh token cookie
+ *             schema:
+ *               type: string
+ *               example: refreshToken=; Path=/api/v1; Expires=Thu, 01 Jan 1970 00:00:00 GMT
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Logged out successfully
+ *       401:
+ *         description: Unauthorized - Invalid or missing access token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Unauthorized
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Failed to logout
  */
 
 /**

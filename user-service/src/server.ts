@@ -1,6 +1,7 @@
 import express, { Express } from "express";
 import "dotenv/config";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { dataSource } from "src/db/config";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "src/swagger";
@@ -16,18 +17,13 @@ const app: Express = express();
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: "*", // Allow all origins in development (restrict in production)
-  methods: [
-    "GET",
-    "POST",
-    "PUT",
-    "PATCH",
-    "DELETE"
-  ],
-  allowedHeaders: ["Content-Type", "Authorization", "x-internal-service-token"]
+  origin: ["http://localhost:8001", "http://localhost:8002", "http://localhost:8003"],
+  credentials: true,
+  preflightContinue: false
 }));
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/v1", router);
 app.use("/api/internal", internalRouter);

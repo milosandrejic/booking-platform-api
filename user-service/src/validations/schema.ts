@@ -61,14 +61,15 @@ export const createProfileSchema: ValidationChain[] = checkSchema({
     }
   },
   dateOfBirth: {
+    notEmpty: {
+      errorMessage: "Date of birth is required"
+    },
     isDate: {
       errorMessage: "Date is invalid"
     }
   },
   nationality: {
-    notEmpty: {
-      errorMessage: "Nationality is required"
-    },
+    optional: true,
     isString: {
       errorMessage: "Nationality should be text"
     }
@@ -78,7 +79,7 @@ export const createProfileSchema: ValidationChain[] = checkSchema({
       errorMessage: "Gender is required"
     },
     isIn: {
-      options: [Gender.MALE, Gender.FEMALE],
+      options: [[Gender.MALE, Gender.FEMALE]],
       errorMessage: "Gender must be male or female"
     }
   }
@@ -171,6 +172,15 @@ export const resetPasswordSchema: ValidationChain[] = checkSchema({
     },
     isString: {
       errorMessage: "Password should be text"
+    }
+  }
+});
+
+export const refreshTokenSchema: ValidationChain[] = checkSchema({
+  refreshToken: {
+    optional: true,
+    isString: {
+      errorMessage: "Refresh token must be a string"
     }
   }
 });

@@ -45,6 +45,24 @@ export class Auth extends BaseEntity {
   })
   role: Role;
 
+  @Column({
+    type: "text",
+    nullable: true
+  })
+  refreshToken: string | null;
+
+  @Column({
+    type: "timestamp",
+    nullable: true
+  })
+  refreshTokenExpiry: Date | null;
+
+  @Column({
+    type: "integer",
+    default: 0
+  })
+  tokenVersion: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

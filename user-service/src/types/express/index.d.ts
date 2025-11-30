@@ -9,6 +9,10 @@ declare global {
         serviceId: string;
         serviceName: string;
       };
+      cookies: {
+        refreshToken?: string;
+        [key: string]: string | undefined;
+      };
     }
   }
 }

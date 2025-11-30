@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { Client, PlaceAutocompleteType } from "@googlemaps/google-maps-services-js";
 
-interface AutocompleteSuggestion {
+type AutocompleteSuggestion = {
   placeId: string;
   description: string;
   mainText: string;
   secondaryText: string;
 }
 
-interface PlaceDetails {
+type PlaceDetails = {
   placeId: string;
   city: string;
   country: string;

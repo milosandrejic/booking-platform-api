@@ -32,4 +32,26 @@ export class AuthRepository {
   remove = async (auth: Auth): Promise<Auth> => {
     return this.repository.remove(auth);
   };
+
+  saveRefreshToken = async (
+    userId: string,
+    hashedToken: string,
+    expiry: Date
+  ): Promise<void> => {
+    await this.repository.update(userId, {
+      refreshToken: hashedToken,
+      refreshTokenExpiry: expiry
+    });
+  };
+
+  clearRefreshToken = async (userId: string): Promise<void> => {
+    await this.repository.update(userId, {
+      refreshToken: null,
+      refreshTokenExpiry: null
+    });
+  };
+
+  incrementTokenVersion = async (userId: string): Promise<void> => {
+    await this.repository.increment({ id: userId }, "tokenVersion", 1);
+  };
 }

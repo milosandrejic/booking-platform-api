@@ -13,15 +13,9 @@ const app: Express = express();
 
 // Enable CORS for all routes
 app.use(cors({
-  origin: "*", // Allow all origins in development (restrict in production)
-  methods: [
-    "GET",
-    "POST",
-    "PUT",
-    "PATCH",
-    "DELETE"
-  ],
-  allowedHeaders: ["Content-Type", "Authorization", "x-internal-service-token"]
+  origin: ["http://localhost:8001", "http://localhost:8002", "http://localhost:8003"],
+  credentials: true,
+  preflightContinue: false
 }));
 
 app.use(express.json());
